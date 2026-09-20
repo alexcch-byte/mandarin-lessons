@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hello, 華語!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-emoji">🐉</span>
+      <div class="brand-text">
+        <h1>Hello, 華語!</h1>
+        <p>Mandarin Lessons</p>
+      </div>
+    </div>
+    <div class="lesson-picker-wrap">
+      <label for="lesson-picker">Lesson</label>
+      <select id="lesson-picker"></select>
+    </div>
+  </div>
+</header>
+
+<div id="voice-banner" class="voice-banner" hidden>
+  <span id="voice-banner-text"></span>
+  <button id="voice-banner-close" aria-label="Dismiss">✕</button>
+</div>
+
+<nav class="tab-bar" id="tab-bar">
+  <button class="tab-btn active" data-tab="vocab">📚 Vocabulary</button>
+  <button class="tab-btn" data-tab="sentences">🧩 Sentences</button>
+  <button class="tab-btn" data-tab="dialogue">💬 Dialogue</button>
+  <button class="tab-btn" data-tab="actions">🙋 Actions</button>
+  <button class="tab-btn" data-tab="writing">✍️ Writing</button>
+  <button class="tab-btn" data-tab="exercises">🎯 Practice</button>
+  <button class="tab-btn" data-tab="culture">🏮 Culture</button>
+</nav>
+
+<main id="app-main">
+  <div id="loading-msg" class="loading-msg">Loading lessons…</div>
+
+  <section id="panel-vocab" class="tab-panel"></section>
+  <section id="panel-sentences" class="tab-panel"></section>
+  <section id="panel-dialogue" class="tab-panel"></section>
+  <section id="panel-actions" class="tab-panel"></section>
+  <section id="panel-writing" class="tab-panel"></section>
+  <section id="panel-exercises" class="tab-panel"></section>
+  <section id="panel-culture" class="tab-panel"></section>
+</main>
+
+<footer class="app-footer">
+  <p>Made for practicing Mandarin at home 加油！(jiāyóu — keep going!)</p>
+</footer>
+
+<script src="vendor/hanzi-writer.min.js"></script>
+<script src="vendor/hanzi-data.js"></script>
+<script src="vendor/audio-manifest.js"></script>
+<script src="lessons/manifest.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
