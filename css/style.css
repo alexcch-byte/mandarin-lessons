@@ -468,3 +468,30 @@ html, body {
   .writing-layout { flex-direction: column; }
   #hanzi-writer-target { width: 240px; height: 240px; }
 }
+
+/* ---------- Videos (YouTube embeds) ---------- */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.video-item h4 { margin: 0 0 8px; font-size: 0.95rem; color: var(--ink); }
+.video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+.video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video-link { display: inline-block; margin-top: 6px; font-size: 0.85rem; color: var(--blue); }
+
+/* ---------- Listening exercise ---------- */
+.listen-row { padding: 12px 0; border-bottom: 1px dashed var(--border-soft); }
+.listen-row:last-of-type { border-bottom: none; }
+.listen-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.listen-num { font-weight: 800; color: var(--orange-dark); min-width: 1.6em; }
+.listen-play { margin-bottom: 0; padding: 6px 14px; }
+.listen-prompt { font-size: 1.15rem; font-weight: 700; color: var(--ink-soft); }
+.listen-options { display: flex; gap: 10px; flex-wrap: wrap; }
+.listen-option {
+  border: 2px solid var(--border-soft); background: #fff; border-radius: 14px;
+  padding: 10px 18px; cursor: pointer; font-size: 1.1rem; font-weight: 700; color: var(--ink);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.listen-option:hover { border-color: var(--orange); }
+.listen-option.correct { border-color: var(--green); background: var(--green-light); }
+.listen-option.wrong { border-color: var(--red); background: #ffecec; }
+.listen-options-pics .listen-option { flex-direction: column; min-width: 130px; padding: 14px 18px; }
+.listen-emoji { font-size: 2.6rem; line-height: 1.1; }
+.listen-label { font-size: 0.85rem; font-weight: 600; color: var(--ink-soft); }

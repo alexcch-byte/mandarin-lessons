@@ -7,23 +7,21 @@ reading.
 
 ## How the kids access it (tablets etc.)
 
-The app is published online at:
+The app is published in two places — use whichever is more convenient:
 
-**https://claude.ai/artifact/12WsBcC82Q9dDmtjLheDB9**
+**https://alexcch-byte.github.io/mandarin-lessons/** (GitHub Pages)
+Public, no sign-in needed for viewers, no pinning/caching quirks. Good
+default for tablets/phones. Source: github.com/alexcch-byte/mandarin-lessons
 
-(An earlier link, `.../APrrfMYiezBuoa6S2MTPsf`, is retired — some viewers got
-stuck seeing an old pinned snapshot of it that never updated, even after
-several republishes. This new link avoids that problem entirely. Please
-switch any bookmarks/shortcuts on tablets or phones to the new one above.)
+**https://claude.ai/artifact/12WsBcC82Q9dDmtjLheDB9** (Claude Artifact)
+Private to your account until shared from the page's Share menu. An earlier
+Artifact link (`.../APrrfMYiezBuoa6S2MTPsf`) is retired — some viewers got
+stuck seeing an old pinned snapshot that never updated even after several
+republishes; if that ever happens again on either link, tell me rather than
+assuming a reload will fix it.
 
-Open Claude.ai's share menu on that page to control who can view it (by
-default it's private to your account). Once shared, any tablet/phone/computer
-with that link can open it in a browser — no app install needed.
-
-When you send me a new lesson PDF (see below), I update this same link in
-place. If a device ever seems to be showing outdated content again despite a
-refresh, that pinning behavior may be back — tell me and I'll investigate
-rather than assume a reload will fix it.
+When you send me a new lesson PDF (see below), I update both links in place
+— no new URL to re-share, no bookmarks to change.
 
 ## How to open it locally instead
 
@@ -36,11 +34,20 @@ practice and pronunciation audio, since everything is bundled locally.
 
 There's also a real installable app (not just a website), built from this
 same code using [Capacitor](https://capacitorjs.com/) to wrap it as Android
-app. It's currently installed directly on the connected Fire tablet as
+app. It's currently installed directly on the Fire tablet(s) as
 `com.mandarinlessons.hellohuayu`. This exists because the Fire tablet's stock
 browser (Silk) and its system voice engine (Amazon IVONA) don't reliably
 support Mandarin — the native app sidesteps both by playing the same bundled
 recordings as the website, no synthesized voice or Silk dependency involved.
+
+**Known fragility**: the Capacitor/Android build lives under a system temp
+folder (see below for why), and Windows has been observed silently deleting
+files from it between sessions spanning multiple days (e.g. `AndroidManifest.xml`
+or parts of `node_modules` going missing, causing a Gradle build to fail with
+a confusing "file doesn't exist" or "module not found" error). If a rebuild
+fails this way, the fix is to delete that temp folder's `android/` and
+`node_modules/` and regenerate from scratch — same steps as the "from
+scratch" section below — rather than trying to patch around missing files.
 
 The Capacitor/Android project itself isn't checked into this Drive folder —
 node_modules and Gradle's build cache are tens of thousands of small files,
@@ -98,7 +105,9 @@ Each week, do this:
    - Run `python vendor/build-audio.py` to generate real Mandarin recordings
      for any new vocabulary/sentences/dialogue, so pronunciation keeps
      working without relying on the device's own voices.
-   - Republish the same hosted link above with the new lesson included.
+   - Republish both hosted links above with the new lesson included (commit
+     + push to the `mandarin-lessons` GitHub repo, and republish the Claude
+     Artifact).
 3. Reopen (or refresh) `index.html`, or the hosted link — the new lesson
    appears in the **Lesson** dropdown at the top, and previous weeks stay
    available for review.

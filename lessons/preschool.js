@@ -267,6 +267,12 @@ window.MANDARIN_LESSONS.push({
     englishText: "In Chinese culture, some numbers are considered lucky or unlucky because of how they sound. The number eight (八, bā) sounds like the word for \"prosperity\" (發, fā), so it's seen as very lucky — many people choose phone numbers or house addresses with lots of eights! The number four (四, sì), on the other hand, sounds like the word for \"death\" (死, sǐ), so it's often avoided — some buildings even skip the fourth floor, going straight from 3 to 5."
   },
 
+  videos: [
+    { title: "巧虎數字歌 1-10 (Numbers Song)", youtubeId: "b-bXtLP0iBE" },
+    { title: "Colors Song 顏色歌 (Little Fox Chinese)", youtubeId: "UulTlStNp5k" },
+    { title: "巧虎聰明小學堂：圓形 (Learn the Circle)", youtubeId: "Vjedvs5GOko" }
+  ],
+
   song: {
     title: "蘑菇濃湯 MOGU MOGU (Mushroom Soup)",
     titleEnglish: "A bilingual cooking song by PlayBIG Music — sing along while making mushroom soup!",

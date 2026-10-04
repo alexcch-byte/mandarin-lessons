@@ -80,7 +80,9 @@
     voiceCache = pickChineseVoice();
     if (voiceCache) return;
     if (voicePollAttempts > 20) {
-      showVoiceBanner();
+      // Recorded audio covers every phrase, so a missing system voice only
+      // matters if the bundle isn't loaded.
+      if (!window.AUDIO_MANIFEST) showVoiceBanner();
       return;
     }
     voicePollAttempts++;
@@ -225,7 +227,7 @@
       var opt = el("option");
       opt.value = idx;
       opt.textContent = lesson.category
-        ? "🌱 " + lesson.title + " (" + lesson.titleEnglish + ")"
+        ? (lesson.icon || "🌱") + " " + lesson.title + " (" + lesson.titleEnglish + ")"
         : "Lesson " + lesson.lessonNumber + " — " + lesson.title + " (" + lesson.titleEnglish + ")";
       picker.appendChild(opt);
     });
@@ -269,7 +271,7 @@
       card.appendChild(el("div", "vocab-hanzi hanzi", v.hanzi));
       card.appendChild(el("div", "vocab-pinyin", v.pinyin));
       card.appendChild(el("div", "vocab-english", v.english));
-      card.appendChild(speakBtn(v.hanzi));
+      card.appendChild(speakBtn(v.say || v.hanzi));
       grid.appendChild(card);
     });
     return grid;
@@ -646,11 +648,105 @@
       panel.appendChild(songBlock);
     }
 
+    var videos = state.currentLesson.videos || [];
+    if (videos.length) {
+      var vBlock = el("div", "exercise-block");
+      vBlock.appendChild(el("h3", null, "🎬 Watch & Learn"));
+      vBlock.appendChild(el("p", "exercise-instructions", "Videos play from YouTube, so they need an internet connection."));
+      var vGrid = el("div", "video-grid");
+      videos.forEach(function (v) {
+        var item = el("div", "video-item");
+        item.appendChild(el("h4", null, v.title));
+        var frameWrap = el("div", "video-frame");
+        var iframe = document.createElement("iframe");
+        iframe.src = "https://www.youtube-nocookie.com/embed/" + v.youtubeId + "?rel=0";
+        iframe.title = v.title;
+        iframe.loading = "lazy";
+        iframe.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        frameWrap.appendChild(iframe);
+        item.appendChild(frameWrap);
+        var link = el("a", "video-link", "Open on YouTube ↗");
+        link.href = "https://www.youtube.com/watch?v=" + v.youtubeId;
+        link.target = "_blank";
+        link.rel = "noopener";
+        item.appendChild(link);
+        vGrid.appendChild(item);
+      });
+      vBlock.appendChild(vGrid);
+      panel.appendChild(vBlock);
+    }
+
     (state.currentLesson.exercises || []).forEach(function (ex) {
       if (ex.type === "match-emoji") panel.appendChild(renderMatchEmoji(ex));
       else if (ex.type === "fill-blank") panel.appendChild(renderFillBlank(ex));
       else if (ex.type === "read-aloud") panel.appendChild(renderReadAloud(ex));
+      else if (ex.type === "listen-pick") panel.appendChild(renderListenPick(ex));
     });
+  }
+
+  // Listening exercise: tap ▶ to hear a recorded phrase, then pick the matching
+  // option (a picture/emoji or a text choice). Tracks a running score.
+  function renderListenPick(ex) {
+    var block = el("div", "exercise-block");
+    block.appendChild(el("h3", null, ex.title));
+    block.appendChild(el("p", "exercise-instructions", ex.instructions));
+
+    var answered = 0, correct = 0;
+    var total = ex.items.length;
+    var score = el("div", "exercise-feedback");
+
+    ex.items.forEach(function (item, idx) {
+      var row = el("div", "listen-row");
+      var head = el("div", "listen-head");
+      head.appendChild(el("span", "listen-num", (idx + 1) + "."));
+      var play = el("button", "play-all-btn listen-play", "▶ Listen");
+      play.addEventListener("click", function () { speak(item.say); });
+      head.appendChild(play);
+      if (item.prompt) head.appendChild(el("span", "listen-prompt hanzi", item.prompt));
+      row.appendChild(head);
+
+      var opts = el("div", "listen-options" + (item.options[0].emoji ? " listen-options-pics" : ""));
+      var done = false;
+      var buttons = [];
+      item.options.forEach(function (o, oi) {
+        var b = el("button", "listen-option");
+        if (o.emoji) b.appendChild(el("span", "listen-emoji", o.emoji));
+        b.appendChild(el("span", "listen-label hanzi", o.label || ""));
+        b.addEventListener("click", function () {
+          if (done) return;
+          done = true;
+          answered++;
+          if (oi === item.answer) {
+            correct++;
+            b.classList.add("correct");
+            speak("對了");
+          } else {
+            b.classList.add("wrong");
+            buttons[item.answer].classList.add("correct");
+          }
+          if (answered === total) {
+            score.className = "exercise-feedback " + (correct === total ? "good" : "bad");
+            score.textContent = correct === total
+              ? "🌟 Perfect! " + correct + " / " + total
+              : "Score: " + correct + " / " + total + " — tap Try again to improve.";
+            retry.hidden = false;
+          }
+        });
+        buttons.push(b);
+        opts.appendChild(b);
+      });
+      row.appendChild(opts);
+      block.appendChild(row);
+    });
+
+    block.appendChild(score);
+    var retry = el("button", "check-btn", "🔄 Try again");
+    retry.hidden = true;
+    retry.addEventListener("click", function () { block.replaceWith(renderListenPick(ex)); });
+    block.appendChild(retry);
+    return block;
   }
 
   function shuffled(arr) {

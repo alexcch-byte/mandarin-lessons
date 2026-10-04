@@ -46,13 +46,14 @@ const texts = new Set();
 function stripEllipsis(s) { return s.replace(/……|\.\.\./g, ''); }
 
 window.MANDARIN_LESSONS.forEach(l => {
-  (l.vocabulary || []).forEach(v => texts.add(v.hanzi));
+  (l.vocabulary || []).forEach(v => texts.add(v.say || v.hanzi));
   (l.sentencePatterns || []).forEach(p => { const s = stripEllipsis(p.hanzi); if (s) texts.add(s); });
   (l.dialogues || []).forEach(d => (d.lines || []).forEach(line => texts.add(line.hanzi)));
   (l.actions || []).forEach(a => texts.add(a.hanzi));
   (l.exercises || []).forEach(ex => {
     if (ex.type === 'match-emoji') (ex.items || []).forEach(i => texts.add(i.hanzi));
     if (ex.type === 'read-aloud') (ex.items || []).forEach(i => texts.add(i));
+    if (ex.type === 'listen-pick') (ex.items || []).forEach(i => texts.add(i.say));
   });
 });
 texts.add('太棒了');
