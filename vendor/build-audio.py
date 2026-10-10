@@ -57,6 +57,7 @@ window.MANDARIN_LESSONS.forEach(l => {
     if (ex.type === 'match-emoji') (ex.items || []).forEach(i => texts.add(i.hanzi));
     if (ex.type === 'read-aloud') (ex.items || []).forEach(i => texts.add(i));
     if (ex.type === 'listen-pick') (ex.items || []).forEach(i => texts.add(i.say));
+    if (ex.type === 'write-blank') (ex.items || []).forEach(i => { if (i.say) texts.add(i.say); });
   });
 });
 texts.add('太棒了');

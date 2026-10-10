@@ -531,3 +531,5 @@ html, body {
 .wb-status.wrong { color: #b5402a; }
 .wb-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .wb-score { margin-top: 14px; font-weight: 800; font-size: 1.05rem; color: #6b3a00; }
+.wb-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.wb-head .speak-btn { flex: none; margin-top: 0; }

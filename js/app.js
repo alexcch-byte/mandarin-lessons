@@ -779,8 +779,15 @@
 
     ex.items.forEach(function (item, idx) {
       var row = el("div", "wb-item");
-      row.appendChild(el("div", "wb-prompt hanzi",
+      // 🔊 reads the whole Chinese sentence (with the missing character filled
+      // in), like a teacher saying it aloud in the paper test. No English
+      // follow-up: this is a test.
+      var sayText = item.say || (item.before + item.answer + item.after).replace(/[問答]：/g, "").replace(/　/g, "");
+      var head = el("div", "wb-head");
+      head.appendChild(speakBtn(sayText, false, { noEnglish: true }));
+      head.appendChild(el("div", "wb-prompt hanzi",
         item.before + '<span class="wb-gap">（　）</span>' + item.after));
+      row.appendChild(head);
       if (item.pinyinHint) row.appendChild(el("div", "wb-hint", item.pinyinHint));
 
       var targetId = "wb-target-" + (++writeBlankSeq);

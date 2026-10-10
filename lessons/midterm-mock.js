@@ -104,23 +104,23 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
       {
         type: "write-blank",
         title: "D1. 寫一寫 — Writing (8%)",
-        instructions: "Write the missing character in each box with your finger — from memory, no tracing! (Characters: 你 好 我 不 他 的 名 字)",
+        instructions: "Tap 🔊 to hear the sentence, then write the missing character in the box with your finger — from memory, no tracing! (Characters: 你 好 我 不 他 的 名 字)",
         items: [
-          { before: "問：你叫什麼名字？　答：", after: "叫大年。", answer: "我", pinyinHint: "___ jiào Dànián." },
-          { before: "謝謝謝謝", after: "。", answer: "你", pinyinHint: "Xièxie xièxie ___." },
-          { before: "答：", after: "客氣。", answer: "不", pinyinHint: "(You're welcome) ___ kèqì." },
-          { before: "問：他是誰？　答：", after: "叫小明。", answer: "他", pinyinHint: "___ jiào Xiǎomíng." }
+          { before: "問：你叫什麼名字？　答：", after: "叫大年。", answer: "我", pinyinHint: "___ jiào Dànián.", say: "你叫什麼名字？我叫大年。" },
+          { before: "謝謝謝謝", after: "。", answer: "你", pinyinHint: "Xièxie xièxie ___.", say: "謝謝，謝謝你。" },
+          { before: "答：", after: "客氣。", answer: "不", pinyinHint: "(You're welcome) ___ kèqì.", say: "謝謝你。不客氣。" },
+          { before: "問：他是誰？　答：", after: "叫小明。", answer: "他", pinyinHint: "___ jiào Xiǎomíng.", say: "他是誰？他叫小明。" }
         ]
       },
       {
         type: "write-blank",
         title: "D2. 寫一寫 — Writing (8%)",
-        instructions: "Write the missing character in each box with your finger — from memory, no tracing! (Characters: 你 好 我 不 他 的 名 字)",
+        instructions: "Tap 🔊 to hear the sentence, then write the missing character in the box with your finger — from memory, no tracing! (Characters: 你 好 我 不 他 的 名 字)",
         items: [
-          { before: "你好！　你", after: "！", answer: "好", pinyinHint: "Nǐ hǎo! Nǐ ___!" },
-          { before: "你好！我", after: "名字是佳佳。", answer: "的", pinyinHint: "Nǐ hǎo! Wǒ ___ míngzì shì Jiājiā." },
-          { before: "你好！我的", after: "字是小明。", answer: "名", pinyinHint: "Nǐ hǎo! Wǒ de ___zì shì Xiǎomíng." },
-          { before: "你好！我的名", after: "是小明。", answer: "字", pinyinHint: "Nǐ hǎo! Wǒ de míng___ shì Xiǎomíng." }
+          { before: "你好！　你", after: "！", answer: "好", pinyinHint: "Nǐ hǎo! Nǐ ___!", say: "你好！你好！" },
+          { before: "你好！我", after: "名字是佳佳。", answer: "的", pinyinHint: "Nǐ hǎo! Wǒ ___ míngzì shì Jiājiā.", say: "你好！我的名字是佳佳。" },
+          { before: "你好！我的", after: "字是小明。", answer: "名", pinyinHint: "Nǐ hǎo! Wǒ de ___zì shì Xiǎomíng.", say: "你好！我的名字是小明。" },
+          { before: "你好！我的名", after: "是小明。", answer: "字", pinyinHint: "Nǐ hǎo! Wǒ de míng___ shì Xiǎomíng.", say: "你好！我的名字是小明。" }
         ]
       }
     ],
