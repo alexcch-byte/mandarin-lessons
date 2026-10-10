@@ -34,6 +34,7 @@ AUDIO_DIR = os.path.join(ROOT, "vendor", "audio")
 MANIFEST_JS = os.path.join(ROOT, "vendor", "audio-manifest.js")
 AUDIO_EN_DIR = os.path.join(ROOT, "vendor", "audio-en")
 MANIFEST_EN_JS = os.path.join(ROOT, "vendor", "audio-en-manifest.js")
+PACK_PATH = os.path.join(ROOT, "vendor", "audio-en-pack.mp3")
 
 EXTRACT_SCRIPT = r"""
 global.window = { MANDARIN_LESSONS: [] };
@@ -185,11 +186,28 @@ def main():
                     time.sleep(1.5)
         time.sleep(0.15)
 
+    # Also pack every English clip into ONE file (vendor/audio-en-pack.mp3) with a
+    # byte-range index. The hosted Artifact allows only 512 files per version, so
+    # it ships the pack instead of ~350 separate clips; the app slices the pack
+    # into per-clip Blobs at load time.
+    pack_index = {}
+    offset = 0
+    with open(PACK_PATH, "wb") as pack:
+        for fname in sorted(set(en_manifest.values())):
+            with open(os.path.join(AUDIO_EN_DIR, fname), "rb") as clip:
+                data = clip.read()
+            pack.write(data)
+            pack_index[fname] = [offset, len(data)]
+            offset += len(data)
+
     with open(MANIFEST_EN_JS, "w", encoding="utf-8") as f:
         f.write("// Maps each Chinese phrase to an English read-along clip in vendor/audio-en/.\n")
         f.write("// Regenerate with: python vendor/build-audio.py\n")
         f.write("window.AUDIO_EN_MANIFEST = ")
         json.dump(en_manifest, f, ensure_ascii=False, separators=(",", ":"))
+        f.write(";\n")
+        f.write("window.AUDIO_EN_PACK = ")
+        json.dump({"url": "vendor/audio-en-pack.mp3", "ranges": pack_index}, f, separators=(",", ":"))
         f.write(";\n")
     print(f"Generated {en_generated} new English clip(s). English manifest has {len(en_manifest)} entries.")
 

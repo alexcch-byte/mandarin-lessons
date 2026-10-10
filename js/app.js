@@ -170,9 +170,35 @@
     try { return localStorage.getItem("englishAudio") !== "off"; } catch (e) { return true; }
   }
 
+  // All English clips ship as one pack file (vendor/audio-en-pack.mp3) that is
+  // sliced into per-clip Blob URLs once it has loaded. Until then — or when the
+  // page is opened straight from disk and fetch() is blocked — fall back to the
+  // individual files in vendor/audio-en/.
+  var englishBlobUrls = null;
+  function loadEnglishPack() {
+    var pack = window.AUDIO_EN_PACK;
+    if (!pack || !window.fetch || !window.URL || !window.Blob) return;
+    fetch(pack.url)
+      .then(function (r) { if (!r.ok) throw new Error("pack " + r.status); return r.arrayBuffer(); })
+      .then(function (buf) {
+        var urls = {};
+        Object.keys(pack.ranges).forEach(function (fname) {
+          var range = pack.ranges[fname];
+          var blob = new Blob([buf.slice(range[0], range[0] + range[1])], { type: "audio/mpeg" });
+          urls[fname] = URL.createObjectURL(blob);
+        });
+        englishBlobUrls = urls;
+      })
+      .catch(function () { /* per-file fallback stays in effect */ });
+  }
+  loadEnglishPack();
+
   function englishClipFor(text) {
     var m = window.AUDIO_EN_MANIFEST;
-    return englishEnabled() && m && m[text] ? "vendor/audio-en/" + m[text] : null;
+    if (!englishEnabled() || !m || !m[text]) return null;
+    return englishBlobUrls && englishBlobUrls[m[text]]
+      ? englishBlobUrls[m[text]]
+      : "vendor/audio-en/" + m[text];
   }
 
   // opts.noEnglish: skip the English follow-up (listening tests, "great job!"
