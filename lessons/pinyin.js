@@ -33,53 +33,53 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
 
     vocabulary: [
       // ---- Phonics 1: the sound each letter makes (taught with o / e / i, as in zhuyin) ----
-      { hanzi: "波", pinyin: "b + o = bo", english: "wave  ·  ㄅㄛ", sayEnglish: "wave", emoji: "🌊", group: P0 },
-      { hanzi: "坡", pinyin: "p + o = po", english: "slope  ·  ㄆㄛ", sayEnglish: "slope", emoji: "⛰️", group: P0 },
-      { hanzi: "摸", pinyin: "m + o = mo", english: "to touch  ·  ㄇㄛ", sayEnglish: "to touch", emoji: "🤲", group: P0 },
-      { hanzi: "佛", pinyin: "f + o = fo", english: "Buddha  ·  ㄈㄛ", sayEnglish: "Buddha", emoji: "🙏", group: P0 },
-      { hanzi: "得", pinyin: "d + e = de", english: "to get  ·  ㄉㄜ", sayEnglish: "to get", emoji: "🏆", group: P0 },
-      { hanzi: "特", pinyin: "t + e = te", english: "special  ·  ㄊㄜ", sayEnglish: "special", emoji: "⭐", group: P0 },
-      { hanzi: "呢", pinyin: "n + e = ne", english: "and you? (a question word)  ·  ㄋㄜ", sayEnglish: "and you?", emoji: "❓", group: P0 },
-      { hanzi: "樂", pinyin: "l + e = le", english: "happy  ·  ㄌㄜ", sayEnglish: "happy", emoji: "😄", group: P0 },
-      { hanzi: "哥", pinyin: "g + e = ge", english: "older brother  ·  ㄍㄜ", sayEnglish: "older brother", emoji: "🧑", group: P0 },
-      { hanzi: "科", pinyin: "k + e = ke", english: "science  ·  ㄎㄜ", sayEnglish: "science", emoji: "🔬", group: P0 },
-      { hanzi: "河", pinyin: "h + e = he", english: "river  ·  ㄏㄜ", sayEnglish: "river", emoji: "🏞️", group: P0 },
-      { hanzi: "雞", pinyin: "j + i = ji", english: "chicken  ·  ㄐㄧ", sayEnglish: "chicken", emoji: "🐔", group: P0 },
-      { hanzi: "七", pinyin: "q + i = qi", english: "seven  ·  ㄑㄧ", sayEnglish: "seven", emoji: "7️⃣", group: P0 },
-      { hanzi: "西", pinyin: "x + i = xi", english: "west  ·  ㄒㄧ", sayEnglish: "west", emoji: "🧭", group: P0 },
-      { hanzi: "知", pinyin: "zh + i = zhi", english: "to know  ·  ㄓ", sayEnglish: "to know", emoji: "💡", group: P0 },
-      { hanzi: "吃", pinyin: "ch + i = chi", english: "to eat  ·  ㄔ", sayEnglish: "to eat", emoji: "🍚", group: P0 },
-      { hanzi: "是", pinyin: "sh + i = shi", english: "is, yes  ·  ㄕ", sayEnglish: "is, yes", emoji: "✅", group: P0 },
-      { hanzi: "日", pinyin: "r + i = ri", english: "sun, day  ·  ㄖ", sayEnglish: "sun, day", emoji: "🌞", group: P0 },
-      { hanzi: "資", pinyin: "z + i = zi", english: "money, resources  ·  ㄗ", sayEnglish: "resources", emoji: "💰", group: P0 },
-      { hanzi: "詞", pinyin: "c + i = ci", english: "word  ·  ㄘ", sayEnglish: "word", emoji: "📖", group: P0 },
-      { hanzi: "四", pinyin: "s + i = si", english: "four  ·  ㄙ", sayEnglish: "four", emoji: "4️⃣", group: P0 },
+      { hanzi: "波", pinyin: "ㄅ b  +  ㄛ o  =  ㄅㄛ bo", english: "wave  ·  ㄅㄛ", sayEnglish: "wave", emoji: "🌊", group: P0 },
+      { hanzi: "坡", pinyin: "ㄆ p  +  ㄛ o  =  ㄆㄛ po", english: "slope  ·  ㄆㄛ", sayEnglish: "slope", emoji: "⛰️", group: P0 },
+      { hanzi: "摸", pinyin: "ㄇ m  +  ㄛ o  =  ㄇㄛ mo", english: "to touch  ·  ㄇㄛ", sayEnglish: "to touch", emoji: "🤲", group: P0 },
+      { hanzi: "佛", pinyin: "ㄈ f  +  ㄛ o  =  ㄈㄛ fo", english: "Buddha  ·  ㄈㄛ", sayEnglish: "Buddha", emoji: "🙏", group: P0 },
+      { hanzi: "得", pinyin: "ㄉ d  +  ㄜ e  =  ㄉㄜ de", english: "to get  ·  ㄉㄜ", sayEnglish: "to get", emoji: "🏆", group: P0 },
+      { hanzi: "特", pinyin: "ㄊ t  +  ㄜ e  =  ㄊㄜ te", english: "special  ·  ㄊㄜ", sayEnglish: "special", emoji: "⭐", group: P0 },
+      { hanzi: "呢", pinyin: "ㄋ n  +  ㄜ e  =  ㄋㄜ ne", english: "and you? (a question word)  ·  ㄋㄜ", sayEnglish: "and you?", emoji: "❓", group: P0 },
+      { hanzi: "樂", pinyin: "ㄌ l  +  ㄜ e  =  ㄌㄜ le", english: "happy  ·  ㄌㄜ", sayEnglish: "happy", emoji: "😄", group: P0 },
+      { hanzi: "哥", pinyin: "ㄍ g  +  ㄜ e  =  ㄍㄜ ge", english: "older brother  ·  ㄍㄜ", sayEnglish: "older brother", emoji: "🧑", group: P0 },
+      { hanzi: "科", pinyin: "ㄎ k  +  ㄜ e  =  ㄎㄜ ke", english: "science  ·  ㄎㄜ", sayEnglish: "science", emoji: "🔬", group: P0 },
+      { hanzi: "河", pinyin: "ㄏ h  +  ㄜ e  =  ㄏㄜ he", english: "river  ·  ㄏㄜ", sayEnglish: "river", emoji: "🏞️", group: P0 },
+      { hanzi: "雞", pinyin: "ㄐ j  +  ㄧ i  =  ㄐㄧ ji", english: "chicken  ·  ㄐㄧ", sayEnglish: "chicken", emoji: "🐔", group: P0 },
+      { hanzi: "七", pinyin: "ㄑ q  +  ㄧ i  =  ㄑㄧ qi", english: "seven  ·  ㄑㄧ", sayEnglish: "seven", emoji: "7️⃣", group: P0 },
+      { hanzi: "西", pinyin: "ㄒ x  +  ㄧ i  =  ㄒㄧ xi", english: "west  ·  ㄒㄧ", sayEnglish: "west", emoji: "🧭", group: P0 },
+      { hanzi: "知", pinyin: "ㄓ zh  +  i  =  ㄓ zhi", english: "to know  ·  ㄓ", sayEnglish: "to know", emoji: "💡", group: P0 },
+      { hanzi: "吃", pinyin: "ㄔ ch  +  i  =  ㄔ chi", english: "to eat  ·  ㄔ", sayEnglish: "to eat", emoji: "🍚", group: P0 },
+      { hanzi: "是", pinyin: "ㄕ sh  +  i  =  ㄕ shi", english: "is, yes  ·  ㄕ", sayEnglish: "is, yes", emoji: "✅", group: P0 },
+      { hanzi: "日", pinyin: "ㄖ r  +  i  =  ㄖ ri", english: "sun, day  ·  ㄖ", sayEnglish: "sun, day", emoji: "🌞", group: P0 },
+      { hanzi: "資", pinyin: "ㄗ z  +  i  =  ㄗ zi", english: "money, resources  ·  ㄗ", sayEnglish: "resources", emoji: "💰", group: P0 },
+      { hanzi: "詞", pinyin: "ㄘ c  +  i  =  ㄘ ci", english: "word  ·  ㄘ", sayEnglish: "word", emoji: "📖", group: P0 },
+      { hanzi: "四", pinyin: "ㄙ s  +  i  =  ㄙ si", english: "four  ·  ㄙ", sayEnglish: "four", emoji: "4️⃣", group: P0 },
 
       // ---- Phonics 2-4: blending an initial with a final to make a syllable ----
-      { hanzi: "八", pinyin: "b + ā = bā", english: "eight  ·  ㄅ + ㄚ", sayEnglish: "eight", emoji: "8️⃣", group: B1 },
-      { hanzi: "趴", pinyin: "p + ā = pā", english: "to lie on your tummy  ·  ㄆ + ㄚ", sayEnglish: "to lie on your tummy", emoji: "🛌", group: B1 },
-      { hanzi: "發", pinyin: "f + ā = fā", english: "to send out  ·  ㄈ + ㄚ", sayEnglish: "to send out", emoji: "📤", group: B1 },
-      { hanzi: "搭", pinyin: "d + ā = dā", english: "to ride (a bus)  ·  ㄉ + ㄚ", sayEnglish: "to ride a bus", emoji: "🚌", group: B1 },
-      { hanzi: "他", pinyin: "t + ā = tā", english: "he, him  ·  ㄊ + ㄚ", sayEnglish: "he", emoji: "👦", group: B1 },
-      { hanzi: "拿", pinyin: "n + á = ná", english: "to hold, to take  ·  ㄋ + ㄚˊ", sayEnglish: "to take", emoji: "🤝", group: B1 },
-      { hanzi: "拉", pinyin: "l + ā = lā", english: "to pull  ·  ㄌ + ㄚ", sayEnglish: "to pull", emoji: "🪢", group: B1 },
+      { hanzi: "八", pinyin: "ㄅ b  +  ㄚ ā  =  ㄅㄚ bā", english: "eight  ·  ㄅ + ㄚ", sayEnglish: "eight", emoji: "8️⃣", group: B1 },
+      { hanzi: "趴", pinyin: "ㄆ p  +  ㄚ ā  =  ㄆㄚ pā", english: "to lie on your tummy  ·  ㄆ + ㄚ", sayEnglish: "to lie on your tummy", emoji: "🛌", group: B1 },
+      { hanzi: "發", pinyin: "ㄈ f  +  ㄚ ā  =  ㄈㄚ fā", english: "to send out  ·  ㄈ + ㄚ", sayEnglish: "to send out", emoji: "📤", group: B1 },
+      { hanzi: "搭", pinyin: "ㄉ d  +  ㄚ ā  =  ㄉㄚ dā", english: "to ride (a bus)  ·  ㄉ + ㄚ", sayEnglish: "to ride a bus", emoji: "🚌", group: B1 },
+      { hanzi: "他", pinyin: "ㄊ t  +  ㄚ ā  =  ㄊㄚ tā", english: "he, him  ·  ㄊ + ㄚ", sayEnglish: "he", emoji: "👦", group: B1 },
+      { hanzi: "拿", pinyin: "ㄋ n  +  ㄚ á  =  ㄋㄚˊ ná", english: "to hold, to take  ·  ㄋ + ㄚˊ", sayEnglish: "to take", emoji: "🤝", group: B1 },
+      { hanzi: "拉", pinyin: "ㄌ l  +  ㄚ ā  =  ㄌㄚ lā", english: "to pull  ·  ㄌ + ㄚ", sayEnglish: "to pull", emoji: "🪢", group: B1 },
 
-      { hanzi: "比", pinyin: "b + ǐ = bǐ", english: "to compare  ·  ㄅ + ㄧˇ", sayEnglish: "to compare", emoji: "⚖️", group: B2 },
-      { hanzi: "皮", pinyin: "p + í = pí", english: "skin  ·  ㄆ + ㄧˊ", sayEnglish: "skin", emoji: "🍌", group: B2 },
-      { hanzi: "米", pinyin: "m + ǐ = mǐ", english: "rice  ·  ㄇ + ㄧˇ", sayEnglish: "rice", emoji: "🍚", group: B2 },
-      { hanzi: "笛", pinyin: "d + í = dí", english: "flute  ·  ㄉ + ㄧˊ", sayEnglish: "flute", emoji: "🎶", group: B2 },
-      { hanzi: "梯", pinyin: "t + ī = tī", english: "ladder  ·  ㄊ + ㄧ", sayEnglish: "ladder", emoji: "🪜", group: B2 },
-      { hanzi: "你", pinyin: "n + ǐ = nǐ", english: "you  ·  ㄋ + ㄧˇ", sayEnglish: "you", emoji: "👉", group: B2 },
-      { hanzi: "力", pinyin: "l + ì = lì", english: "strength  ·  ㄌ + ㄧˋ", sayEnglish: "strength", emoji: "💪", group: B2 },
+      { hanzi: "比", pinyin: "ㄅ b  +  ㄧ ǐ  =  ㄅㄧˇ bǐ", english: "to compare  ·  ㄅ + ㄧˇ", sayEnglish: "to compare", emoji: "⚖️", group: B2 },
+      { hanzi: "皮", pinyin: "ㄆ p  +  ㄧ í  =  ㄆㄧˊ pí", english: "skin  ·  ㄆ + ㄧˊ", sayEnglish: "skin", emoji: "🍌", group: B2 },
+      { hanzi: "米", pinyin: "ㄇ m  +  ㄧ ǐ  =  ㄇㄧˇ mǐ", english: "rice  ·  ㄇ + ㄧˇ", sayEnglish: "rice", emoji: "🍚", group: B2 },
+      { hanzi: "笛", pinyin: "ㄉ d  +  ㄧ í  =  ㄉㄧˊ dí", english: "flute  ·  ㄉ + ㄧˊ", sayEnglish: "flute", emoji: "🎶", group: B2 },
+      { hanzi: "梯", pinyin: "ㄊ t  +  ㄧ ī  =  ㄊㄧ tī", english: "ladder  ·  ㄊ + ㄧ", sayEnglish: "ladder", emoji: "🪜", group: B2 },
+      { hanzi: "你", pinyin: "ㄋ n  +  ㄧ ǐ  =  ㄋㄧˇ nǐ", english: "you  ·  ㄋ + ㄧˇ", sayEnglish: "you", emoji: "👉", group: B2 },
+      { hanzi: "力", pinyin: "ㄌ l  +  ㄧ ì  =  ㄌㄧˋ lì", english: "strength  ·  ㄌ + ㄧˋ", sayEnglish: "strength", emoji: "💪", group: B2 },
 
-      { hanzi: "不", pinyin: "b + ù = bù", english: "no, not  ·  ㄅ + ㄨˋ", sayEnglish: "no, not", emoji: "🚫", group: B3 },
-      { hanzi: "撲", pinyin: "p + ū = pū", english: "to pounce  ·  ㄆ + ㄨ", sayEnglish: "to pounce", emoji: "🐱", group: B3 },
-      { hanzi: "木", pinyin: "m + ù = mù", english: "wood  ·  ㄇ + ㄨˋ", sayEnglish: "wood", emoji: "🪵", group: B3 },
-      { hanzi: "肚", pinyin: "d + ù = dù", english: "tummy  ·  ㄉ + ㄨˋ", sayEnglish: "tummy", emoji: "🫃", group: B3 },
-      { hanzi: "兔", pinyin: "t + ù = tù", english: "rabbit  ·  ㄊ + ㄨˋ", sayEnglish: "rabbit", emoji: "🐰", group: B3 },
-      { hanzi: "路", pinyin: "l + ù = lù", english: "road  ·  ㄌ + ㄨˋ", sayEnglish: "road", emoji: "🛣️", group: B3 },
-      { hanzi: "哭", pinyin: "k + ū = kū", english: "to cry  ·  ㄎ + ㄨ", sayEnglish: "to cry", emoji: "😢", group: B3 },
-      { hanzi: "湖", pinyin: "h + ú = hú", english: "lake  ·  ㄏ + ㄨˊ", sayEnglish: "lake", emoji: "🏞️", group: B3 },
+      { hanzi: "不", pinyin: "ㄅ b  +  ㄨ ù  =  ㄅㄨˋ bù", english: "no, not  ·  ㄅ + ㄨˋ", sayEnglish: "no, not", emoji: "🚫", group: B3 },
+      { hanzi: "撲", pinyin: "ㄆ p  +  ㄨ ū  =  ㄆㄨ pū", english: "to pounce  ·  ㄆ + ㄨ", sayEnglish: "to pounce", emoji: "🐱", group: B3 },
+      { hanzi: "木", pinyin: "ㄇ m  +  ㄨ ù  =  ㄇㄨˋ mù", english: "wood  ·  ㄇ + ㄨˋ", sayEnglish: "wood", emoji: "🪵", group: B3 },
+      { hanzi: "肚", pinyin: "ㄉ d  +  ㄨ ù  =  ㄉㄨˋ dù", english: "tummy  ·  ㄉ + ㄨˋ", sayEnglish: "tummy", emoji: "🫃", group: B3 },
+      { hanzi: "兔", pinyin: "ㄊ t  +  ㄨ ù  =  ㄊㄨˋ tù", english: "rabbit  ·  ㄊ + ㄨˋ", sayEnglish: "rabbit", emoji: "🐰", group: B3 },
+      { hanzi: "路", pinyin: "ㄌ l  +  ㄨ ù  =  ㄌㄨˋ lù", english: "road  ·  ㄌ + ㄨˋ", sayEnglish: "road", emoji: "🛣️", group: B3 },
+      { hanzi: "哭", pinyin: "ㄎ k  +  ㄨ ū  =  ㄎㄨ kū", english: "to cry  ·  ㄎ + ㄨ", sayEnglish: "to cry", emoji: "😢", group: B3 },
+      { hanzi: "湖", pinyin: "ㄏ h  +  ㄨ ú  =  ㄏㄨˊ hú", english: "lake  ·  ㄏ + ㄨˊ", sayEnglish: "lake", emoji: "🏞️", group: B3 },
 
       // ---- Picture words: one familiar word per letter ----
       { hanzi: "爸爸", pinyin: "bàba", english: "b as in dad  ·  ㄅ", sayEnglish: "dad", emoji: "👨", group: I1 },
@@ -203,14 +203,14 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
         instructions: "Blend the first sound with the vowel. Which syllable do they make?",
         wordBank: ["bā", "mā", "tā", "nǐ", "mǐ", "bù", "tù", "lù"],
         items: [
-          { before: "b + ā  =", after: "", answer: "bā", pinyinHint: "八 eight" },
-          { before: "m + ā  =", after: "", answer: "mā", pinyinHint: "媽 mom" },
-          { before: "t + ā  =", after: "", answer: "tā", pinyinHint: "他 he" },
-          { before: "n + ǐ  =", after: "", answer: "nǐ", pinyinHint: "你 you" },
-          { before: "m + ǐ  =", after: "", answer: "mǐ", pinyinHint: "米 rice" },
-          { before: "b + ù  =", after: "", answer: "bù", pinyinHint: "不 no" },
-          { before: "t + ù  =", after: "", answer: "tù", pinyinHint: "兔 rabbit" },
-          { before: "l + ù  =", after: "", answer: "lù", pinyinHint: "路 road" }
+          { before: "ㄅ b + ㄚ ā  =", after: "", answer: "bā", pinyinHint: "八 eight  ㄅㄚ" },
+          { before: "ㄇ m + ㄚ ā  =", after: "", answer: "mā", pinyinHint: "媽 mom  ㄇㄚ" },
+          { before: "ㄊ t + ㄚ ā  =", after: "", answer: "tā", pinyinHint: "他 he  ㄊㄚ" },
+          { before: "ㄋ n + ㄧ ǐ  =", after: "", answer: "nǐ", pinyinHint: "你 you  ㄋㄧˇ" },
+          { before: "ㄇ m + ㄧ ǐ  =", after: "", answer: "mǐ", pinyinHint: "米 rice  ㄇㄧˇ" },
+          { before: "ㄅ b + ㄨ ù  =", after: "", answer: "bù", pinyinHint: "不 no  ㄅㄨˋ" },
+          { before: "ㄊ t + ㄨ ù  =", after: "", answer: "tù", pinyinHint: "兔 rabbit  ㄊㄨˋ" },
+          { before: "ㄌ l + ㄨ ù  =", after: "", answer: "lù", pinyinHint: "路 road  ㄌㄨˋ" }
         ]
       },
       {
@@ -219,14 +219,14 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
         instructions: "Which first sound is hiding in each syllable?",
         wordBank: ["b", "p", "m", "f", "d", "t", "n", "l", "g", "k", "h"],
         items: [
-          { before: "", after: "+ ā  =  bā 八", answer: "b", pinyinHint: "first sound of bā" },
-          { before: "", after: "+ ā  =  mā 媽", answer: "m", pinyinHint: "first sound of mā" },
-          { before: "", after: "+ ǐ  =  nǐ 你", answer: "n", pinyinHint: "first sound of nǐ" },
-          { before: "", after: "+ í  =  pí 皮", answer: "p", pinyinHint: "first sound of pí" },
-          { before: "", after: "+ ù  =  tù 兔", answer: "t", pinyinHint: "first sound of tù" },
-          { before: "", after: "+ ù  =  lù 路", answer: "l", pinyinHint: "first sound of lù" },
-          { before: "", after: "+ ū  =  kū 哭", answer: "k", pinyinHint: "first sound of kū" },
-          { before: "", after: "+ ú  =  hú 湖", answer: "h", pinyinHint: "first sound of hú" }
+          { before: "", after: "+ ㄚ ā  =  bā 八  (ㄅㄚ)", answer: "b", pinyinHint: "first sound of bā  ㄅ" },
+          { before: "", after: "+ ㄚ ā  =  mā 媽  (ㄇㄚ)", answer: "m", pinyinHint: "first sound of mā  ㄇ" },
+          { before: "", after: "+ ㄧ ǐ  =  nǐ 你  (ㄋㄧˇ)", answer: "n", pinyinHint: "first sound of nǐ  ㄋ" },
+          { before: "", after: "+ ㄧ í  =  pí 皮  (ㄆㄧˊ)", answer: "p", pinyinHint: "first sound of pí  ㄆ" },
+          { before: "", after: "+ ㄨ ù  =  tù 兔  (ㄊㄨˋ)", answer: "t", pinyinHint: "first sound of tù  ㄊ" },
+          { before: "", after: "+ ㄨ ù  =  lù 路  (ㄌㄨˋ)", answer: "l", pinyinHint: "first sound of lù  ㄌ" },
+          { before: "", after: "+ ㄨ ū  =  kū 哭  (ㄎㄨ)", answer: "k", pinyinHint: "first sound of kū  ㄎ" },
+          { before: "", after: "+ ㄨ ú  =  hú 湖  (ㄏㄨˊ)", answer: "h", pinyinHint: "first sound of hú  ㄏ" }
         ]
       },
       {
@@ -307,7 +307,7 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
 
     culture: {
       title: "What is pinyin? 什麼是拼音？",
-      englishText: "Pinyin phonics works like English phonics: first learn the sound each letter makes (b, p, m, f...), then blend a first sound with a vowel to build a syllable — b + a = bā. Pinyin spells Mandarin with the same letters we use in English, so every character gets a pronunciation guide. In Taiwan, schools teach zhuyin (ㄅㄆㄇㄈ) instead — each pinyin sound has a zhuyin twin, and every card here shows both. Every syllable also has a tone: 1st (high and flat), 2nd (rising), 3rd (dipping), 4th (falling). The same sound with a different tone is a different word — mā is mom, má is hemp, mǎ is horse and mà means to scold. Tip: listen first, copy the sound out loud, and use the 🇬🇧 English button in the header if you want to hear what each word means."
+      englishText: "Pinyin phonics works like English phonics: first learn the sound each letter makes (b, p, m, f...), then blend a first sound with a vowel to build a syllable — b + a = bā. Every sound has two writings: the pinyin letter and its zhuyin symbol, shown together on each card (ㄅ b + ㄚ a = ㄅㄚ bā). For zh, ch, sh, r, z, c and s the symbol already includes the 'i' sound, so ㄓ alone says 'zhi'. Pinyin spells Mandarin with the same letters we use in English, so every character gets a pronunciation guide. In Taiwan, schools teach zhuyin (ㄅㄆㄇㄈ) instead — each pinyin sound has a zhuyin twin, and every card here shows both. Every syllable also has a tone: 1st (high and flat), 2nd (rising), 3rd (dipping), 4th (falling). The same sound with a different tone is a different word — mā is mom, má is hemp, mǎ is horse and mà means to scold. Tip: listen first, copy the sound out loud, and use the 🇬🇧 English button in the header if you want to hear what each word means."
     }
   });
 })();
