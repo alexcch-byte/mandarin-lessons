@@ -464,6 +464,10 @@
     var panel = document.getElementById("panel-writing");
     panel.innerHTML = "";
     panel.appendChild(el("h2", "section-title", "✍️ Character Writing Practice"));
+    if (!(state.currentLesson.writingPractice || []).length) {
+      panel.appendChild(el("p", "section-sub", "No tracing practice in this lesson. Check the Practice tab for writing from memory."));
+      return;
+    }
     panel.appendChild(el("p", "section-sub", "Pick a character, watch how it's written, then trace it yourself."));
 
     var layout = el("div", "writing-layout");
@@ -741,7 +745,126 @@
       else if (ex.type === "fill-blank") panel.appendChild(renderFillBlank(ex));
       else if (ex.type === "read-aloud") panel.appendChild(renderReadAloud(ex));
       else if (ex.type === "listen-pick") panel.appendChild(renderListenPick(ex));
+      else if (ex.type === "write-blank") panel.appendChild(renderWriteBlank(ex));
     });
+  }
+
+  // Test-style writing: the sentence has a gap and the child writes the missing
+  // character from memory in an empty box — no outline, no tracing guide, no
+  // hints. Hanzi Writer judges each stroke against the character's stroke data;
+  // the result is "perfect" / "good" / "needs practice" by number of mistakes.
+  // "Show answer" gives up on the item (it counts as not correct).
+  var writeBlankSeq = 0;
+  function renderWriteBlank(ex) {
+    var block = el("div", "exercise-block");
+    block.appendChild(el("h3", null, ex.title));
+    block.appendChild(el("p", "exercise-instructions", ex.instructions));
+
+    var total = ex.items.length;
+    var score = el("div", "wb-score", "");
+    var results = [];
+    function updateScore() {
+      var done = results.filter(function (r) { return r !== undefined; }).length;
+      var good = results.filter(function (r) { return r === true; }).length;
+      score.textContent = done === total
+        ? "Score: " + good + " of " + total + (good === total ? "  ⭐ Great job!" : "")
+        : "Written so far: " + done + " of " + total;
+    }
+    updateScore();
+
+    if (typeof HanziWriter === "undefined") {
+      block.appendChild(el("p", null, "Writing could not load (Hanzi Writer script missing)."));
+      return block;
+    }
+
+    ex.items.forEach(function (item, idx) {
+      var row = el("div", "wb-item");
+      row.appendChild(el("div", "wb-prompt hanzi",
+        item.before + '<span class="wb-gap">（　）</span>' + item.after));
+      if (item.pinyinHint) row.appendChild(el("div", "wb-hint", item.pinyinHint));
+
+      var targetId = "wb-target-" + (++writeBlankSeq);
+      var box = el("div", "wb-box");
+      box.id = targetId;
+      row.appendChild(box);
+
+      var status = el("div", "wb-status", "✍️ Write the missing character in the box.");
+      row.appendChild(status);
+
+      var actions = el("div", "wb-actions");
+      var again = el("button", "btn-reset", "↺ Try again");
+      var giveUp = el("button", "btn-show", "🏳️ Show answer");
+      actions.appendChild(again);
+      actions.appendChild(giveUp);
+      row.appendChild(actions);
+
+      var writer = null;
+      var finished = false;
+
+      function start() {
+        box.innerHTML = "";
+        finished = false;
+        status.textContent = "✍️ Write the missing character in the box.";
+        status.className = "wb-status";
+        writer = HanziWriter.create(box, item.answer, {
+          width: 200,
+          height: 200,
+          padding: 12,
+          showCharacter: false,
+          showOutline: false,
+          strokeColor: "#3a2e1f",
+          drawingWidth: 18,
+          charDataLoader: loadCharDataFor
+        });
+        writer.quiz({
+          showHintAfterMisses: false,
+          highlightOnComplete: false,
+          leniency: 1.1,
+          onMistake: function () {
+            status.textContent = "Not quite — try that stroke again.";
+            status.className = "wb-status wrong";
+          },
+          onComplete: function (summary) {
+            if (finished) return;
+            finished = true;
+            var mistakes = summary && summary.totalMistakes || 0;
+            var ok = mistakes <= 2;
+            results[idx] = ok;
+            writer.showCharacter();
+            if (mistakes === 0) status.textContent = "⭐ Perfect! " + item.answer;
+            else if (ok) status.textContent = "✅ Correct! " + item.answer + "  (" + mistakes + " small slip" + (mistakes > 1 ? "s" : "") + ")";
+            else status.textContent = "❌ That's the right character " + item.answer + ", but it took " + mistakes + " tries — practice it again!";
+            status.className = "wb-status " + (ok ? "right" : "wrong");
+            if (ok) speak("對了", null, { noEnglish: true });
+            updateScore();
+          }
+        });
+      }
+
+      again.addEventListener("click", function () {
+        if (writer) writer.cancelQuiz();
+        results[idx] = undefined;
+        updateScore();
+        start();
+      });
+      giveUp.addEventListener("click", function () {
+        if (!writer) return;
+        writer.cancelQuiz();
+        finished = true;
+        results[idx] = false;
+        writer.showCharacter();
+        writer.animateCharacter();
+        status.textContent = "The answer is " + item.answer + ". Tap “Try again” to write it.";
+        status.className = "wb-status wrong";
+        updateScore();
+      });
+
+      start();
+      block.appendChild(row);
+    });
+
+    block.appendChild(score);
+    return block;
   }
 
   // Listening exercise: tap ▶ to hear a recorded phrase, then pick the matching

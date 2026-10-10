@@ -42,14 +42,6 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
       }
     ],
 
-    writingPractice: CHARS.map(function (c) {
-      var info = {
-        "你": ["nǐ", "you"], "好": ["hǎo", "good"], "我": ["wǒ", "I, me"], "不": ["bù", "not, no"],
-        "他": ["tā", "he, him"], "的": ["de", "'s, of"], "名": ["míng", "name"], "字": ["zì", "word, character"]
-      }[c];
-      return { hanzi: c, pinyin: info[0], english: info[1] };
-    }),
-
     exercises: [
       {
         type: "listen-pick",
@@ -110,10 +102,9 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
         ]
       },
       {
-        type: "fill-blank",
+        type: "write-blank",
         title: "D1. 寫一寫 — Writing (8%)",
-        instructions: "Choose the right character: 你 好 我 不 他 的 名 字",
-        wordBank: CHARS,
+        instructions: "Write the missing character in each box with your finger — from memory, no tracing! (Characters: 你 好 我 不 他 的 名 字)",
         items: [
           { before: "問：你叫什麼名字？　答：", after: "叫大年。", answer: "我", pinyinHint: "___ jiào Dànián." },
           { before: "謝謝謝謝", after: "。", answer: "你", pinyinHint: "Xièxie xièxie ___." },
@@ -122,10 +113,9 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
         ]
       },
       {
-        type: "fill-blank",
+        type: "write-blank",
         title: "D2. 寫一寫 — Writing (8%)",
-        instructions: "Choose the right character: 你 好 我 不 他 的 名 字",
-        wordBank: CHARS,
+        instructions: "Write the missing character in each box with your finger — from memory, no tracing! (Characters: 你 好 我 不 他 的 名 字)",
         items: [
           { before: "你好！　你", after: "！", answer: "好", pinyinHint: "Nǐ hǎo! Nǐ ___!" },
           { before: "你好！我", after: "名字是佳佳。", answer: "的", pinyinHint: "Nǐ hǎo! Wǒ ___ míngzì shì Jiājiā." },
@@ -137,7 +127,7 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
 
     culture: {
       title: "About this mock test 關於模擬考",
-      englishText: "This is a practice version of the Calgary Mandarin School Level 1A first-semester midterm (A: Listen and Check 20%, B: Write the Phonics 14%, C: Listen and Select the Consonant 30%, D: Writing 16%, E: Speaking 20%). Sections A and C play recorded audio — tap ▶ Listen as many times as you like. Sections B and D check themselves, and Section E (Speaking) is in the Dialogue tab: say each sentence aloud, then tap 🔊 to compare. The Writing tab lets you practice the eight characters 你 好 我 不 他 的 名 字 stroke by stroke."
+      englishText: "This is a practice version of the Calgary Mandarin School Level 1A first-semester midterm (A: Listen and Check 20%, B: Write the Phonics 14%, C: Listen and Select the Consonant 30%, D: Writing 16%, E: Speaking 20%). Sections A and C play recorded audio — tap ▶ Listen as many times as you like. Section B checks itself. In Section D you write each missing character from memory in an empty box — there is no tracing and no hint, and the app checks your strokes when you finish. Section E (Speaking) is in the Dialogue tab: say each sentence aloud, then tap 🔊 to compare. To practise tracing the eight characters 你 好 我 不 他 的 名 字 first, use the “Lesson 1 Writing” entry."
     }
   });
 })();

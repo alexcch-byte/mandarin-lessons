@@ -508,3 +508,26 @@ html, body {
 .listen-options-pics .listen-option { flex-direction: column; min-width: 130px; padding: 14px 18px; }
 .listen-emoji { font-size: 2.6rem; line-height: 1.1; }
 .listen-label { font-size: 0.85rem; font-weight: 600; color: var(--ink-soft); }
+
+/* ---------- Write-from-memory (test) exercises ---------- */
+.wb-item { padding: 14px 0; border-bottom: 1px dashed var(--border-soft); }
+.wb-prompt { font-size: 1.3rem; margin-bottom: 4px; }
+.wb-gap { color: var(--orange, #f28c28); font-weight: 700; }
+.wb-hint { color: #7a6a52; font-size: 0.9rem; margin-bottom: 8px; }
+.wb-box {
+  width: 200px;
+  height: 200px;
+  background:
+    linear-gradient(to right, transparent 49.5%, #eadfc4 49.5%, #eadfc4 50.5%, transparent 50.5%),
+    linear-gradient(to bottom, transparent 49.5%, #eadfc4 49.5%, #eadfc4 50.5%, transparent 50.5%),
+    #fff;
+  border: 2px dashed #d9c48f;
+  border-radius: 12px;
+  touch-action: none;
+}
+.wb-box svg { width: 200px; height: 200px; touch-action: none; }
+.wb-status { margin: 8px 0; font-weight: 700; color: #6b3a00; min-height: 1.4em; }
+.wb-status.right { color: #2f7d58; }
+.wb-status.wrong { color: #b5402a; }
+.wb-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.wb-score { margin-top: 14px; font-weight: 800; font-size: 1.05rem; color: #6b3a00; }
