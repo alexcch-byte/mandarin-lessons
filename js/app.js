@@ -265,12 +265,12 @@
     return e;
   }
 
-  function speakBtn(text, small) {
+  function speakBtn(text, small, opts) {
     var b = el("button", "speak-btn" + (small ? " small" : ""), "🔊");
     b.title = "Play pronunciation";
     b.addEventListener("click", function (ev) {
       ev.stopPropagation();
-      speak(text);
+      speak(text, null, opts);
     });
     return b;
   }
@@ -327,7 +327,9 @@
       card.appendChild(el("div", "vocab-hanzi hanzi", v.hanzi));
       card.appendChild(el("div", "vocab-pinyin", v.pinyin));
       card.appendChild(el("div", "vocab-english", v.english));
-      card.appendChild(speakBtn(v.say || v.hanzi));
+      // noEnglish: pronunciation-only cards (e.g. pinyin letter sounds), where
+      // an English meaning of the recording's character would be misleading.
+      card.appendChild(speakBtn(v.say || v.hanzi, false, v.noEnglish ? { noEnglish: true } : null));
       grid.appendChild(card);
     });
     return grid;
@@ -541,7 +543,7 @@
       // example word's audio instead of a stroke animation.
       quizBtn.style.display = "none";
       showBtn.style.display = "";
-      showBtn.textContent = "🔊 Hear the word";
+      showBtn.textContent = "🔊 Hear it";
       showBtn.onclick = function () {
         document.getElementById("writing-status").textContent = "";
         if (c.wordHanzi) speak(c.wordHanzi);
