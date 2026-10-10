@@ -5,6 +5,7 @@
 // Adding a new week: create lessons/lesson-<n>.js, then add its filename below.
 window.LESSON_FILES = [
   "lessons/preschool.js",
+  "lessons/miss-panda.js",
   "lessons/lesson-1.js",
   "lessons/lesson-2.js",
   "lessons/lesson-3.js",

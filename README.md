@@ -40,14 +40,16 @@ browser (Silk) and its system voice engine (Amazon IVONA) don't reliably
 support Mandarin — the native app sidesteps both by playing the same bundled
 recordings as the website, no synthesized voice or Silk dependency involved.
 
-**Known fragility**: the Capacitor/Android build lives under a system temp
-folder (see below for why), and Windows has been observed silently deleting
-files from it between sessions spanning multiple days (e.g. `AndroidManifest.xml`
-or parts of `node_modules` going missing, causing a Gradle build to fail with
-a confusing "file doesn't exist" or "module not found" error). If a rebuild
-fails this way, the fix is to delete that temp folder's `android/` and
-`node_modules/` and regenerate from scratch — same steps as the "from
-scratch" section below — rather than trying to patch around missing files.
+**Where the build lives**: `C:\Users\strid\mandarin-android-build\` (a permanent
+local folder, not Drive and not a temp folder). It used to sit under a system
+temp folder, and Windows silently deleted files from it between sessions
+(`AndroidManifest.xml`, parts of `node_modules`), which broke Gradle builds.
+If a rebuild ever fails with a "file doesn't exist" or "module not found"
+error, delete that folder's `android/` and `node_modules/` and regenerate
+from scratch with the steps below rather than patching around missing files.
+To refresh the app after new lessons: re-copy the site files into its `www/`
+folder (including `vendor/audio` and `vendor/video`), run `npx cap sync android`,
+then `./gradlew.bat assembleDebug` and `adb -s <serial> install -r` the APK.
 
 The Capacitor/Android project itself isn't checked into this Drive folder —
 node_modules and Gradle's build cache are tens of thousands of small files,
@@ -117,6 +119,29 @@ If you ever want to add or fix a lesson yourself without me, open
 English/Chinese text, no coding knowledge required. Just make sure commas and
 quote marks stay intact.
 
+### Optional lesson fields
+
+Besides the basics (vocabulary, sentencePatterns, dialogues, actions,
+writingPractice, exercises, culture), a lesson file can include:
+
+- `icon: "📝"` — emoji shown before the title in the Lesson dropdown.
+- `say: "..."` on a vocabulary item — the text actually spoken when it
+  differs from the displayed `hanzi` (e.g. 的 is spoken as 我的).
+- `exercises: [{ type: "listen-pick", items: [{ say, answer, options: [{emoji?, label?}] }] }]`
+  — tap ▶ to hear `say`, then choose the option at index `answer`.
+- `videos: [{ title, youtubeId }]` — YouTube embeds in the Practice tab.
+- `song: { title, titleEnglish, videoFile }` — a bundled local video.
+
+Current entries beyond the numbered lessons: Preschool, Homework 1–3
+(Zhuyin ㄅㄆㄇㄈ / ㄉㄊㄋㄌ / ㄍㄎㄏ ㄐㄑㄒ), "Lesson 1 Writing"
+(你好我不他的名字), and the Mock Midterm (Level 1A) with listening sections.
+
+## Publishing note (GitHub)
+
+The repo is public, so only lesson content goes in it. GitHub rejects pushes
+that expose a private email — commit with the account's numeric `noreply`
+address as both author and committer.
+
 ## What's in each lesson tab
 
 - **📚 Vocabulary** — flashcards: character, pinyin, English, a picture emoji,
@@ -127,8 +152,10 @@ quote marks stay intact.
 - **🙋 Actions** — classroom command phrases (stand up, sit down, etc.).
 - **✍️ Writing** — pick any character from the week's lesson and either watch
   the stroke order animate, or trace it yourself with the mouse/finger.
-- **🎯 Practice** — matching, fill-in-the-blank, and read-aloud review
-  exercises with instant feedback.
+- **🎯 Practice** — matching, fill-in-the-blank, read-aloud, and listening
+  ("listen and pick") review exercises with instant feedback. Some entries
+  also show a song video or a "🎬 Watch & Learn" block of YouTube videos
+  (these need an internet connection).
 - **🏮 Culture** — the short cultural reading passage included in the lesson.
 
 ## Notes on the tech (for reference)
