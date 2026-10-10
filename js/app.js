@@ -11,7 +11,8 @@
     currentChar: null,
     currentUtterance: null,
     zhuyinClear: null,
-    currentAudio: null
+    currentAudio: null,
+    speakToken: 0
   };
 
   // ---------------- Script loading ----------------
@@ -138,17 +139,13 @@
   // device, regardless of what (if any) TTS voices are installed. TTS
   // (native or Web Speech) is only a fallback for text that has no
   // recording, e.g. something added after the audio bundle was last built.
-  function playBundledAudio(text, onend) {
-    var manifest = window.AUDIO_MANIFEST;
-    var fname = manifest && manifest[text];
-    if (!fname) return false;
-
+  function playAudioFile(url, onend) {
     if (state.currentAudio) {
       state.currentAudio.pause();
       state.currentAudio.onended = null;
       state.currentAudio.onerror = null;
     }
-    var audio = new Audio("vendor/audio/" + fname);
+    var audio = new Audio(url);
     audio.onended = function () { state.currentAudio = null; if (onend) onend(); };
     audio.onerror = function () { state.currentAudio = null; if (onend) onend(); };
     state.currentAudio = audio;
@@ -156,10 +153,43 @@
     if (playPromise && playPromise.catch) {
       playPromise.catch(function () { state.currentAudio = null; if (onend) onend(); });
     }
+  }
+
+  function playBundledAudio(text, onend) {
+    var manifest = window.AUDIO_MANIFEST;
+    var fname = manifest && manifest[text];
+    if (!fname) return false;
+    playAudioFile("vendor/audio/" + fname, onend);
     return true;
   }
 
-  function speak(text, onend) {
+  // English read-alongs (vendor/audio-en/*.mp3) so children who can't read yet
+  // still hear what the Chinese means. Played right after the Chinese clip;
+  // a parent can switch it off with the 🇬🇧 button in the header.
+  function englishEnabled() {
+    try { return localStorage.getItem("englishAudio") !== "off"; } catch (e) { return true; }
+  }
+
+  function englishClipFor(text) {
+    var m = window.AUDIO_EN_MANIFEST;
+    return englishEnabled() && m && m[text] ? "vendor/audio-en/" + m[text] : null;
+  }
+
+  // opts.noEnglish: skip the English follow-up (listening tests, "great job!"
+  // feedback — where a translation would give the answer away or just be noise).
+  function speak(text, onend, opts) {
+    var token = ++state.speakToken;
+    var enUrl = !(opts && opts.noEnglish) ? englishClipFor(text) : null;
+    if (enUrl) {
+      var afterChinese = onend;
+      onend = function () {
+        if (token !== state.speakToken) return;
+        setTimeout(function () {
+          if (token !== state.speakToken) return;
+          playAudioFile(enUrl, afterChinese);
+        }, 250);
+      };
+    }
     if (playBundledAudio(text, onend)) return;
 
     var tts = nativeTTS();
@@ -620,7 +650,7 @@
         status.textContent = mistakes === 0
           ? "🌟 Perfect! Great job!"
           : "✅ Done! (" + mistakes + " little slips — try again for a perfect score)";
-        speak("太棒了");
+        speak("太棒了", null, { noEnglish: true });
       }
     });
   }
@@ -702,7 +732,7 @@
       var head = el("div", "listen-head");
       head.appendChild(el("span", "listen-num", (idx + 1) + "."));
       var play = el("button", "play-all-btn listen-play", "▶ Listen");
-      play.addEventListener("click", function () { speak(item.say); });
+      play.addEventListener("click", function () { speak(item.say, null, { noEnglish: true }); });
       head.appendChild(play);
       if (item.prompt) head.appendChild(el("span", "listen-prompt hanzi", item.prompt));
       row.appendChild(head);
@@ -721,7 +751,7 @@
           if (oi === item.answer) {
             correct++;
             b.classList.add("correct");
-            speak("對了");
+            speak("對了", null, { noEnglish: true });
           } else {
             b.classList.add("wrong");
             buttons[item.answer].classList.add("correct");
@@ -775,7 +805,7 @@
       card.addEventListener("click", function () {
         if (item.hanzi === promptWord.hanzi) {
           card.classList.add("correct");
-          speak("對了");
+          speak("對了", null, { noEnglish: true });
         } else {
           card.classList.add("wrong");
           setTimeout(function () { card.classList.remove("wrong"); }, 600);
@@ -862,7 +892,7 @@
       feedback.textContent = allGood
         ? "🌟 All correct! Great job!"
         : correctCount + " / " + rows.length + " correct — check the red ones and try again.";
-      if (allGood) speak("太棒了");
+      if (allGood) speak("太棒了", null, { noEnglish: true });
     });
     block.appendChild(checkBtn);
     block.appendChild(feedback);
@@ -911,6 +941,22 @@
       banner.hidden = true;
       banner.dataset.dismissed = "1";
     });
+  }
+
+  var enToggle = document.getElementById("english-toggle");
+  function refreshEnglishToggle() {
+    if (!enToggle) return;
+    var on = englishEnabled();
+    enToggle.textContent = on ? "🇬🇧 English: On" : "🇬🇧 English: Off";
+    enToggle.setAttribute("aria-pressed", on ? "true" : "false");
+    enToggle.classList.toggle("off", !on);
+  }
+  if (enToggle) {
+    enToggle.addEventListener("click", function () {
+      try { localStorage.setItem("englishAudio", englishEnabled() ? "off" : "on"); } catch (e) {}
+      refreshEnglishToggle();
+    });
+    refreshEnglishToggle();
   }
 
   loadAllLessons()

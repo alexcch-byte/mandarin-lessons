@@ -63,6 +63,19 @@ html, body {
 }
 .brand-text p { margin: 0; font-size: 0.85rem; color: #7a4a10; font-weight: 600; }
 
+.english-toggle {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--green);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.english-toggle.off { background: #fff; color: #6b3a00; }
 .lesson-picker-wrap { display: flex; align-items: center; gap: 8px; }
 .lesson-picker-wrap label { font-weight: 700; color: #6b3a00; font-size: 0.9rem; }
 #lesson-picker {

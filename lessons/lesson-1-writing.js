@@ -19,7 +19,7 @@ window.MANDARIN_LESSONS.push({
     { hanzi: "我", pinyin: "wǒ", english: "I, me  ·  ㄨㄛˇ", emoji: "🙋", group: "✍️ Lesson 1 Characters" },
     { hanzi: "不", pinyin: "bù", english: "not, no  ·  ㄅㄨˋ", emoji: "🚫", group: "✍️ Lesson 1 Characters" },
     { hanzi: "他", pinyin: "tā", english: "he, him  ·  ㄊㄚ", emoji: "👦", group: "✍️ Lesson 1 Characters" },
-    { hanzi: "的", say: "我的", pinyin: "de", english: "'s (belonging to)  ·  ˙ㄉㄜ", emoji: "🔗", group: "✍️ Lesson 1 Characters" },
+    { hanzi: "的", say: "我的", sayEnglish: "my", pinyin: "de", english: "'s (belonging to)  ·  ˙ㄉㄜ", emoji: "🔗", group: "✍️ Lesson 1 Characters" },
     { hanzi: "名", pinyin: "míng", english: "name  ·  ㄇㄧㄥˊ", emoji: "📛", group: "✍️ Lesson 1 Characters" },
     { hanzi: "字", pinyin: "zì", english: "word, character  ·  ㄗˋ", emoji: "🔤", group: "✍️ Lesson 1 Characters" }
   ],
