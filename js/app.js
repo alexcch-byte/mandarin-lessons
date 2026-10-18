@@ -155,11 +155,47 @@
     }
   }
 
-  function playBundledAudio(text, onend) {
+  // Audio "packs": all the recordings of a kind ship as ONE file (the hosted
+  // Artifact allows only 512 files per version) plus a byte-range index. The
+  // pack is fetched once and sliced into per-clip Blob URLs. Until it has
+  // loaded — or when the page is opened straight from disk and fetch() is
+  // blocked — playback falls back to the individual files in the folder.
+  function loadPack(pack) {
+    var p = { urls: null, settled: true, promise: null };
+    if (!pack || !window.fetch || !window.URL || !window.Blob) return p;
+    p.settled = false;
+    p.promise = fetch(pack.url)
+      .then(function (r) { if (!r.ok) throw new Error("pack " + r.status); return r.arrayBuffer(); })
+      .then(function (buf) {
+        var urls = {};
+        Object.keys(pack.ranges).forEach(function (fname) {
+          var range = pack.ranges[fname];
+          urls[fname] = URL.createObjectURL(new Blob([buf.slice(range[0], range[0] + range[1])], { type: "audio/mpeg" }));
+        });
+        p.urls = urls;
+      })
+      .catch(function () { /* per-file fallback stays in effect */ })
+      .then(function () { p.settled = true; });
+    return p;
+  }
+  var zhPack = loadPack(window.AUDIO_PACK);
+  var enPack = loadPack(window.AUDIO_EN_PACK);
+
+  // Resolve a clip's URL (pack blob if available, else the loose file), waiting
+  // for the pack first if it is still downloading.
+  function withClipUrl(pack, dir, fname, cb) {
+    function go() { cb(pack.urls && pack.urls[fname] ? pack.urls[fname] : dir + fname); }
+    if (!pack.settled) pack.promise.then(go); else go();
+  }
+
+  function playBundledAudio(text, onend, token) {
     var manifest = window.AUDIO_MANIFEST;
     var fname = manifest && manifest[text];
     if (!fname) return false;
-    playAudioFile("vendor/audio/" + fname, onend);
+    withClipUrl(zhPack, "vendor/audio/", fname, function (url) {
+      if (token !== undefined && token !== state.speakToken) return;
+      playAudioFile(url, onend);
+    });
     return true;
   }
 
@@ -170,53 +206,33 @@
     try { return localStorage.getItem("englishAudio") !== "off"; } catch (e) { return true; }
   }
 
-  // All English clips ship as one pack file (vendor/audio-en-pack.mp3) that is
-  // sliced into per-clip Blob URLs once it has loaded. Until then — or when the
-  // page is opened straight from disk and fetch() is blocked — fall back to the
-  // individual files in vendor/audio-en/.
-  var englishBlobUrls = null;
-  function loadEnglishPack() {
-    var pack = window.AUDIO_EN_PACK;
-    if (!pack || !window.fetch || !window.URL || !window.Blob) return;
-    fetch(pack.url)
-      .then(function (r) { if (!r.ok) throw new Error("pack " + r.status); return r.arrayBuffer(); })
-      .then(function (buf) {
-        var urls = {};
-        Object.keys(pack.ranges).forEach(function (fname) {
-          var range = pack.ranges[fname];
-          var blob = new Blob([buf.slice(range[0], range[0] + range[1])], { type: "audio/mpeg" });
-          urls[fname] = URL.createObjectURL(blob);
-        });
-        englishBlobUrls = urls;
-      })
-      .catch(function () { /* per-file fallback stays in effect */ });
-  }
-  loadEnglishPack();
-
-  function englishClipFor(text) {
+  function englishClipFor(text, force) {
     var m = window.AUDIO_EN_MANIFEST;
-    if (!englishEnabled() || !m || !m[text]) return null;
-    return englishBlobUrls && englishBlobUrls[m[text]]
-      ? englishBlobUrls[m[text]]
-      : "vendor/audio-en/" + m[text];
+    if ((!force && !englishEnabled()) || !m || !m[text]) return null;
+    return m[text]; // file name inside vendor/audio-en/ (or the English pack)
   }
 
   // opts.noEnglish: skip the English follow-up (listening tests, "great job!"
   // feedback — where a translation would give the answer away or just be noise).
   function speak(text, onend, opts) {
     var token = ++state.speakToken;
-    var enUrl = !(opts && opts.noEnglish) ? englishClipFor(text) : null;
-    if (enUrl) {
+    // opts.forceEnglish: play the English even if the header toggle is off
+    // (used by the 🎧 "Tell me" descriptions, whose whole point is the English).
+    var enName = !(opts && opts.noEnglish) ? englishClipFor(text, opts && opts.forceEnglish) : null;
+    if (enName) {
       var afterChinese = onend;
       onend = function () {
         if (token !== state.speakToken) return;
         setTimeout(function () {
           if (token !== state.speakToken) return;
-          playAudioFile(enUrl, afterChinese);
+          withClipUrl(enPack, "vendor/audio-en/", enName, function (url) {
+            if (token !== state.speakToken) return;
+            playAudioFile(url, afterChinese);
+          });
         }, 250);
       };
     }
-    if (playBundledAudio(text, onend)) return;
+    if (playBundledAudio(text, onend, token)) return;
 
     var tts = nativeTTS();
     if (tts) {
@@ -323,13 +339,34 @@
     var grid = el("div", "card-grid");
     list.forEach(function (v) {
       var card = el("div", "vocab-card");
-      card.appendChild(el("div", "vocab-emoji", v.emoji || "🀄"));
+      // Visual: a real colour swatch, a drawn shape (inline SVG), or an emoji.
+      var visual;
+      if (v.swatch) {
+        visual = el("div", "vocab-swatch");
+        visual.style.background = v.swatch;
+      } else if (v.svg) {
+        visual = el("div", "vocab-svg", v.svg);
+      } else {
+        visual = el("div", "vocab-emoji", v.emoji || "🀄");
+      }
+      card.appendChild(visual);
       card.appendChild(el("div", "vocab-hanzi hanzi", v.hanzi));
       card.appendChild(el("div", "vocab-pinyin", v.pinyin));
       card.appendChild(el("div", "vocab-english", v.english));
       // noEnglish: pronunciation-only cards (e.g. pinyin letter sounds), where
       // an English meaning of the recording's character would be misleading.
       card.appendChild(speakBtn(v.say || v.hanzi, false, v.noEnglish ? { noEnglish: true } : null));
+      // 🎧 "Tell me": a short spoken description (Chinese, then English) so
+      // children who can't read yet still understand what the card is about.
+      if (v.describe && v.describe.zh) {
+        var tell = el("button", "describe-btn", "🎧 Tell me");
+        tell.title = "Hear a description";
+        tell.addEventListener("click", function (ev) {
+          ev.stopPropagation();
+          speak(v.describe.zh, null, { forceEnglish: true });
+        });
+        card.appendChild(tell);
+      }
       grid.appendChild(card);
     });
     return grid;

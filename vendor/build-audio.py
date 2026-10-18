@@ -49,7 +49,7 @@ const texts = new Set();
 function stripEllipsis(s) { return s.replace(/……|\.\.\./g, ''); }
 
 window.MANDARIN_LESSONS.forEach(l => {
-  (l.vocabulary || []).forEach(v => texts.add(v.say || v.hanzi));
+  (l.vocabulary || []).forEach(v => { texts.add(v.say || v.hanzi); if (v.describe && v.describe.zh) texts.add(v.describe.zh); });
   (l.sentencePatterns || []).forEach(p => { const s = stripEllipsis(p.hanzi); if (s) texts.add(s); });
   (l.dialogues || []).forEach(d => (d.lines || []).forEach(line => texts.add(line.hanzi)));
   (l.actions || []).forEach(a => texts.add(a.hanzi));
@@ -79,6 +79,7 @@ function addEn(zh, en) {
 }
 window.MANDARIN_LESSONS.forEach(l => {
   (l.vocabulary || []).forEach(v => addEn(v.say || v.hanzi, v.sayEnglish || v.english));
+  (l.vocabulary || []).forEach(v => { if (v.describe) addEn(v.describe.zh, v.describe.en); });
 });
 window.MANDARIN_LESSONS.forEach(l => {
   (l.sentencePatterns || []).forEach(p => addEn(stripEllipsis(p.hanzi), p.english));
@@ -152,11 +153,28 @@ def main():
         if (i + 1) % 20 == 0:
             print(f"  ...{i + 1}/{len(texts)}")
 
+    # Pack every Chinese clip into ONE file (vendor/audio-pack.mp3) with a
+    # byte-range index: the hosted Artifact allows only 512 files per version,
+    # so it ships the pack instead of ~500 separate clips. The app slices the
+    # pack into per-clip Blobs at load time (see loadPack in js/app.js).
+    zh_index = {}
+    zh_offset = 0
+    with open(os.path.join(ROOT, "vendor", "audio-pack.mp3"), "wb") as pack:
+        for fname in sorted(set(manifest.values())):
+            with open(os.path.join(AUDIO_DIR, fname), "rb") as clip:
+                data = clip.read()
+            pack.write(data)
+            zh_index[fname] = [zh_offset, len(data)]
+            zh_offset += len(data)
+
     with open(MANIFEST_JS, "w", encoding="utf-8") as f:
         f.write("// Maps each spoken phrase to its pre-recorded audio file in vendor/audio/.\n")
         f.write("// Regenerate with: python vendor/build-audio.py\n")
         f.write("window.AUDIO_MANIFEST = ")
         json.dump(manifest, f, ensure_ascii=False, separators=(",", ":"))
+        f.write(";\n")
+        f.write("window.AUDIO_PACK = ")
+        json.dump({"url": "vendor/audio-pack.mp3", "ranges": zh_index}, f, separators=(",", ":"))
         f.write(";\n")
 
     print(f"Generated {generated} new clip(s). Manifest has {len(manifest)} entries total.")
