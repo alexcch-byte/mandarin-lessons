@@ -559,3 +559,6 @@ html, body {
   cursor: pointer;
 }
 .describe-btn:active { transform: scale(0.95); }
+.match-prompt { display: flex; align-items: center; gap: 10px; }
+.match-prompt .speak-btn { flex: none; margin-top: 0; }
+.match-prompt p { margin: 8px 0; }

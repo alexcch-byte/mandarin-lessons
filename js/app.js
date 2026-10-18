@@ -990,8 +990,12 @@
 
     var targetOrder = shuffled(ex.items);
     var promptWord = ex.items[Math.floor(Math.random() * ex.items.length)];
-    var promptLine = el("div", null,
+    // 🔊 reads the word so children who can't read it yet can still answer.
+    // No English follow-up here: it would give the answer away.
+    var promptLine = el("div", "match-prompt",
       '<p style="font-weight:700;">Which picture matches: <span class="hanzi" style="font-size:1.3rem;">' + promptWord.hanzi + "</span> (" + promptWord.pinyin + ")?</p>");
+    var promptSpeak = speakBtn(promptWord.hanzi, false, { noEnglish: true });
+    promptLine.insertBefore(promptSpeak, promptLine.firstChild);
     block.appendChild(promptLine);
 
     var grid = el("div", "match-grid");
