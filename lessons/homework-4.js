@@ -47,10 +47,10 @@ window.MANDARIN_LESSONS.push({
       instructions: "Each word is missing its first sound. Choose the right zhuyin symbol.",
       wordBank: ["ㄓ", "ㄔ", "ㄕ", "ㄖ"],
       items: [
-        { before: "", after: "íshēngjī — 直升機 helicopter 🚁", answer: "ㄓ", pinyinHint: "zhíshēngjī" },
-        { before: "", after: "ángjǐnglù — 長頸鹿 giraffe 🦒", answer: "ㄔ", pinyinHint: "chángjǐnglù" },
-        { before: "", after: "īzi — 獅子 lion 🦁", answer: "ㄕ", pinyinHint: "shīzi" },
-        { before: "", after: "èqìqiú — 熱氣球 hot air balloon 🎈", answer: "ㄖ", pinyinHint: "rèqìqiú" }
+        { before: "", after: "íshēngjī — 直升機 helicopter 🚁", say: "直升機", answer: "ㄓ", pinyinHint: "zhíshēngjī" },
+        { before: "", after: "ángjǐnglù — 長頸鹿 giraffe 🦒", say: "長頸鹿", answer: "ㄔ", pinyinHint: "chángjǐnglù" },
+        { before: "", after: "īzi — 獅子 lion 🦁", say: "獅子", answer: "ㄕ", pinyinHint: "shīzi" },
+        { before: "", after: "èqìqiú — 熱氣球 hot air balloon 🎈", say: "熱氣球", answer: "ㄖ", pinyinHint: "rèqìqiú" }
       ]
     },
     {

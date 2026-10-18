@@ -1037,6 +1037,13 @@
       var row = el("div", "fillblank-row");
       var rowId = "fb-" + Math.random().toString(36).slice(2);
 
+      // Optional 🔊: item.say is the full phrase/sentence to read aloud, so
+      // children who can't read the line yet can still hear it.
+      if (item.say) {
+        var sayBtn = speakBtn(item.say, true);
+        sayBtn.style.marginRight = "8px";
+        row.appendChild(sayBtn);
+      }
       var sentence = el("span", null,
         '<span class="hanzi">' + item.before + '</span> <span class="blank-slot" data-row="' + rowId + '"></span> <span class="hanzi">' + item.after + "</span>");
       row.appendChild(sentence);
