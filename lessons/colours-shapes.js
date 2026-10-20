@@ -143,6 +143,10 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
       { hanzi: "圓", pinyin: "yuán", english: "round" }
     ],
 
+    videos: [
+      { title: "五顏六色的巴士 (Colourful Bus Song — Pinkfong)", youtubeId: "9nqIOvWuG0M" }
+    ],
+
     exercises: [
       {
         type: "match-emoji",

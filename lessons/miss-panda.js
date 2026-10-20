@@ -191,6 +191,10 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
       { hanzi: "魚", pinyin: "yú", english: "fish" }
     ],
 
+    videos: [
+      { title: "巧虎數字歌 1-10 (Numbers Song)", youtubeId: "b-bXtLP0iBE" }
+    ],
+
     exercises: [
       {
         type: "match-emoji",
