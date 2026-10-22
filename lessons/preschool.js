@@ -270,7 +270,8 @@ window.MANDARIN_LESSONS.push({
   videos: [
     { title: "巧虎數字歌 1-10 (Numbers Song)", youtubeId: "b-bXtLP0iBE" },
     { title: "Colors Song 顏色歌 (Little Fox Chinese)", youtubeId: "UulTlStNp5k" },
-    { title: "巧虎聰明小學堂：圓形 (Learn the Circle)", youtubeId: "Vjedvs5GOko" }
+    { title: "巧虎聰明小學堂：圓形 (Learn the Circle)", youtubeId: "Vjedvs5GOko" },
+    { title: "一閃一閃亮晶晶 (Twinkle Twinkle Little Star — Galaxy Kids Chinese)", youtubeId: "UiS46gi8sho" }
   ],
 
   song: {
