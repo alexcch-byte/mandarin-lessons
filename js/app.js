@@ -758,7 +758,7 @@
         item.appendChild(el("h4", null, v.title));
         var frameWrap = el("div", "video-frame");
         var iframe = document.createElement("iframe");
-        iframe.src = "https://www.youtube-nocookie.com/embed/" + v.youtubeId + "?rel=0";
+        iframe.src = "https://www.youtube-nocookie.com/embed/" + v.youtubeId + "?rel=0&playsinline=1&modestbranding=1";
         iframe.title = v.title;
         iframe.loading = "lazy";
         iframe.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen";
@@ -766,11 +766,17 @@
         iframe.referrerPolicy = "strict-origin-when-cross-origin";
         frameWrap.appendChild(iframe);
         item.appendChild(frameWrap);
-        var link = el("a", "video-link", "Open on YouTube ↗");
-        link.href = "https://www.youtube.com/watch?v=" + v.youtubeId;
-        link.target = "_blank";
-        link.rel = "noopener";
-        item.appendChild(link);
+        // In the Android app the video plays right here in the embedded player;
+        // the "open on YouTube" link would take a child out of the app (and out
+        // of a locked-down Kids profile), so it is only shown on the website.
+        var inNativeApp = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+        if (!inNativeApp) {
+          var link = el("a", "video-link", "Open on YouTube ↗");
+          link.href = "https://www.youtube.com/watch?v=" + v.youtubeId;
+          link.target = "_blank";
+          link.rel = "noopener";
+          item.appendChild(link);
+        }
         vGrid.appendChild(item);
       });
       vBlock.appendChild(vGrid);
