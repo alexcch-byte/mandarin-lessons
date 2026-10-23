@@ -29,7 +29,8 @@
   var MIN_STEPS = 8, MAX_STEPS = 12;
   var QUIZ_ROUNDS = 8;
   var MEMORY_PAIRS = 4;
-  var BALLOON_COLOURS = ["#ef6f6c", "#f7b267", "#f4d35e", "#7bc67e", "#6cb4ee", "#b18ae0"];
+  // Every balloon is the same pale colour so it never competes with the colour of the picture inside.
+  var BALLOON_COLOUR = "#fff3cf";
 
   var api = function () { return window.HelloHuayu; };
   var root, body, titleEl, progressEl, backBtn;
@@ -380,7 +381,7 @@
     options.forEach(function (opt, n) {
       var b;
       if (g.mode === "balloon") {
-        b = el("button", "balloon", '<span class="balloon-body" style="background:' + BALLOON_COLOURS[(g.round + n * 2) % BALLOON_COLOURS.length] +
+        b = el("button", "balloon", '<span class="balloon-body" style="background:' + BALLOON_COLOUR +
           '">' + visualHtml(opt.visual) + '</span><span class="balloon-string"></span>');
         b.style.animationDelay = (n * 0.5) + "s";
       } else {
@@ -428,7 +429,7 @@
     game = { mode: "memory", index: index, level: lv, moves: 0, matched: 0, first: null, busy: false };
     setHeader(lv.title, "Moves: 0", "← Levels", function () { showLevelList("memory"); });
     body.innerHTML = "";
-    var wrap = el("div", "quiz-wrap");
+    var wrap = el("div", "quiz-wrap quiz-memory");
     wrap.appendChild(el("div", "maze-prompt", "Flip two cards. Find the pictures that match!"));
     var grid = el("div", "mem-grid");
     deck.forEach(function (item) {

@@ -648,6 +648,7 @@ html, body {
 .game-card-emoji { font-size: 3.4rem; line-height: 1.1; }
 .game-card small { color: #8a7a62; font-size: 0.85rem; }
 .quiz-wrap { max-width: 620px; margin: 0 auto; }
+.quiz-wrap.quiz-memory { max-width: 800px; }
 .quiz-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; }
 .quiz-dot { width: 18px; height: 18px; border-radius: 50%; background: #eadfc4; border: 2px solid #d9c48f; }
 .quiz-dot.done { background: #f6c453; border-color: #e1a82a; }
@@ -663,7 +664,7 @@ html, body {
 }
 .balloon-body {
   width: 120px; height: 140px; border-radius: 50% 50% 46% 46%; display: flex; align-items: center; justify-content: center;
-  box-shadow: inset -8px -10px 16px rgba(0,0,0,0.15); border: 3px solid rgba(255,255,255,0.6);
+  box-shadow: inset -8px -10px 16px rgba(0,0,0,0.1), 0 3px 8px rgba(0,0,0,0.12); border: 4px solid #e3c36b;
 }
 .balloon-body .maze-swatch { width: 66px; height: 66px; }
 .balloon-body .maze-shape svg { width: 66px; height: 66px; }
@@ -673,7 +674,7 @@ html, body {
 .balloon.wrong { animation: maze-shake 0.4s; }
 .balloon.pop { animation: balloon-pop 0.5s forwards; }
 @keyframes balloon-pop { 0% { transform: scale(1); opacity: 1; } 60% { transform: scale(1.4); opacity: 0.8; } 100% { transform: scale(1.7); opacity: 0; } }
-.mem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.mem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 780px; margin: 0 auto; }
 .mem-card {
   aspect-ratio: 1 / 1; border: 3px solid #d9c48f; border-radius: 16px; cursor: pointer; background: #ffe9a8;
   display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; position: relative;
@@ -683,8 +684,11 @@ html, body {
 .mem-card.flipped .mem-front { display: none; }
 .mem-card.flipped .mem-back { display: flex; align-items: center; justify-content: center; }
 .mem-card.matched { background: #e4f7ec; border-color: #2f8f5b; }
-.mem-front { font-size: 2.6rem; }
-.mem-card .maze-swatch { width: 70%; height: auto; aspect-ratio: 1 / 1; }
+.mem-front { font-size: 3.4rem; }
+.mem-card .maze-swatch { width: 90%; height: auto; aspect-ratio: 1 / 1; }
+.mem-card .maze-shape { width: 92%; display: block; }
 .mem-card .maze-shape svg { width: 100%; height: auto; }
-.mem-card .maze-emoji { font-size: 2.8rem; }
+.mem-card .maze-emoji { font-size: 4.2rem; }
+.mem-card.flipped { padding: 2px; }
+.mem-card .mem-back { width: 100%; height: 100%; }
 @media (max-width: 520px) { .game-hub { grid-template-columns: 1fr; } .mem-grid { gap: 8px; } }
