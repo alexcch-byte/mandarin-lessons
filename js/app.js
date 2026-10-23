@@ -1155,6 +1155,12 @@
     });
   }
 
+  // Small API for the maze sub-game (js/maze.js): spoken audio and the lessons.
+  window.HelloHuayu = {
+    speak: speak,
+    lessons: function () { return state.lessons; }
+  };
+
   var enToggle = document.getElementById("english-toggle");
   function refreshEnglishToggle() {
     if (!enToggle) return;
