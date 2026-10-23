@@ -636,3 +636,55 @@ html, body {
   cursor: pointer; box-shadow: var(--shadow); color: #5a2d00;
 }
 .maze-btn.primary { background: #8a63c7; border-color: #8a63c7; color: #fff; }
+
+/* ---------- Games hub, Easy Pick, Balloon Pop, Memory Match ---------- */
+.game-hub { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.game-card {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center;
+  border: 3px solid #f0d9a0; background: #fff; border-radius: 20px; padding: 18px 12px; cursor: pointer;
+  box-shadow: var(--shadow); font-size: 1.1rem; color: #5a2d00;
+}
+.game-card:active { transform: scale(0.97); }
+.game-card-emoji { font-size: 3.4rem; line-height: 1.1; }
+.game-card small { color: #8a7a62; font-size: 0.85rem; }
+.quiz-wrap { max-width: 620px; margin: 0 auto; }
+.quiz-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; }
+.quiz-dot { width: 18px; height: 18px; border-radius: 50%; background: #eadfc4; border: 2px solid #d9c48f; }
+.quiz-dot.done { background: #f6c453; border-color: #e1a82a; }
+.easy-choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.easy-choice { min-height: 220px; }
+.easy-choice .maze-swatch { width: 130px; height: 130px; }
+.easy-choice .maze-shape svg { width: 130px; height: 130px; }
+.easy-choice .maze-emoji { font-size: 6rem; }
+.balloon-field { display: flex; justify-content: space-around; align-items: flex-end; min-height: 280px; padding-top: 10px; }
+.balloon {
+  border: none; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center;
+  animation: balloon-bob 3s ease-in-out infinite; padding: 0;
+}
+.balloon-body {
+  width: 120px; height: 140px; border-radius: 50% 50% 46% 46%; display: flex; align-items: center; justify-content: center;
+  box-shadow: inset -8px -10px 16px rgba(0,0,0,0.15); border: 3px solid rgba(255,255,255,0.6);
+}
+.balloon-body .maze-swatch { width: 66px; height: 66px; }
+.balloon-body .maze-shape svg { width: 66px; height: 66px; }
+.balloon-body .maze-emoji { font-size: 3.4rem; }
+.balloon-string { width: 2px; height: 50px; background: #8a7a62; display: block; }
+@keyframes balloon-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.balloon.wrong { animation: maze-shake 0.4s; }
+.balloon.pop { animation: balloon-pop 0.5s forwards; }
+@keyframes balloon-pop { 0% { transform: scale(1); opacity: 1; } 60% { transform: scale(1.4); opacity: 0.8; } 100% { transform: scale(1.7); opacity: 0; } }
+.mem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.mem-card {
+  aspect-ratio: 1 / 1; border: 3px solid #d9c48f; border-radius: 16px; cursor: pointer; background: #ffe9a8;
+  display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; position: relative;
+}
+.mem-card .mem-back { display: none; }
+.mem-card.flipped { background: #fff; }
+.mem-card.flipped .mem-front { display: none; }
+.mem-card.flipped .mem-back { display: flex; align-items: center; justify-content: center; }
+.mem-card.matched { background: #e4f7ec; border-color: #2f8f5b; }
+.mem-front { font-size: 2.6rem; }
+.mem-card .maze-swatch { width: 70%; height: auto; aspect-ratio: 1 / 1; }
+.mem-card .maze-shape svg { width: 100%; height: auto; }
+.mem-card .maze-emoji { font-size: 2.8rem; }
+@media (max-width: 520px) { .game-hub { grid-template-columns: 1fr; } .mem-grid { gap: 8px; } }
