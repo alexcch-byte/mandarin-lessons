@@ -21,5 +21,6 @@ window.LESSON_FILES = [
   "lessons/homework-3.js",
   "lessons/homework-4.js",
   "lessons/homework-5.js",
+  "lessons/homework-6.js",
   "lessons/reading-contest.js"
 ];
