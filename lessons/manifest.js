@@ -7,6 +7,7 @@ window.LESSON_FILES = [
   "lessons/preschool.js",
   "lessons/miss-panda.js",
   "lessons/pinyin.js",
+  "lessons/pinyin-blending.js",
   "lessons/colours-shapes.js",
   "lessons/song-topics.js",
   "lessons/lesson-1.js",
