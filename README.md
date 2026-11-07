@@ -176,3 +176,10 @@ address as both author and committer.
 - The hosted version is a **Claude Artifact** (multi-file HTML/CSS/JS
   publish) — free, no server to maintain, updates instantly when I republish
   it after a new lesson.
+
+## Download the Android app
+
+The website footer has a **Download the Android app** button. It links to the APK attached to the
+latest GitHub Release (`releases/latest/download/HelloHuayu.apk`). To publish a new build:
+`gh release create vX.Y HelloHuayu.apk --repo alexcch-byte/mandarin-lessons` (keep the file name
+`HelloHuayu.apk`, since the button links to that name). The button hides itself inside the app.

@@ -56,8 +56,19 @@
 </main>
 
 <footer class="app-footer">
+  <div id="apk-download" class="apk-download">
+    <a class="apk-btn" href="https://github.com/alexcch-byte/mandarin-lessons/releases/latest/download/HelloHuayu.apk" download>📲 Download the Android app</a>
+    <p class="apk-note">For Android phones &amp; Fire tablets. Open the downloaded file and, if asked, allow “install unknown apps” for your browser. Works offline.</p>
+  </div>
   <p>Made for practicing Mandarin at home 加油！(jiāyóu — keep going!)</p>
 </footer>
+<script>
+  // The download button is for the website only — hide it inside the Android app.
+  if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
+    var apkBox = document.getElementById("apk-download");
+    if (apkBox) apkBox.style.display = "none";
+  }
+</script>
 
 <script src="vendor/hanzi-writer.min.js"></script>
 <script src="vendor/hanzi-data.js"></script>
