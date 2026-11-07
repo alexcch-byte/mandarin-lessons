@@ -335,9 +335,56 @@
   }
 
   // ---------------- Vocabulary ----------------
+  // Blending card: the two separate sounds, then the sounds added together —
+  //   [ㄅ b 🔊] + [ㄠ ao 🔊] = [bāo 🔊]   and a button that plays all three in turn.
+  // v.blend = { parts: [{label, say}, {label, say}], whole: {label, say} }
+  function buildBlendCard(v) {
+    var card = el("div", "vocab-card blend-card");
+    var row = el("div", "blend-row");
+    var chips = [];
+
+    function chip(part, cls) {
+      var c = el("button", "blend-chip " + cls, '<span class="blend-chip-label">' + part.label + "</span><span class=\"blend-chip-ico\">🔊</span>");
+      c.type = "button";
+      c.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        speak(part.say, null, { noEnglish: true });
+      });
+      chips.push({ node: c, say: part.say });
+      return c;
+    }
+
+    row.appendChild(chip(v.blend.parts[0], "blend-part"));
+    row.appendChild(el("span", "blend-op", "+"));
+    row.appendChild(chip(v.blend.parts[1], "blend-part"));
+    row.appendChild(el("span", "blend-op", "="));
+    row.appendChild(chip(v.blend.whole, "blend-whole"));
+    card.appendChild(row);
+
+    var play = el("button", "blend-play", "▶ Hear it blend");
+    play.type = "button";
+    play.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      var i = 0;
+      (function next() {
+        chips.forEach(function (c) { c.node.classList.remove("playing"); });
+        if (i >= chips.length) return;
+        var c = chips[i++];
+        c.node.classList.add("playing");
+        speak(c.say, function () {
+          setTimeout(next, 350);
+        }, { noEnglish: true });
+      })();
+    });
+    card.appendChild(play);
+    return card;
+  }
+
   function buildVocabGrid(list) {
     var grid = el("div", "card-grid");
+    if (list.length && list[0].blend) grid.classList.add("blend-grid");
     list.forEach(function (v) {
+      if (v.blend) { grid.appendChild(buildBlendCard(v)); return; }
       var card = el("div", "vocab-card");
       // Visual: a real colour swatch, a drawn shape (inline SVG), or an emoji.
       var visual;

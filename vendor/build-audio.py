@@ -49,7 +49,7 @@ const texts = new Set();
 function stripEllipsis(s) { return s.replace(/……|\.\.\./g, ''); }
 
 window.MANDARIN_LESSONS.forEach(l => {
-  (l.vocabulary || []).forEach(v => { texts.add(v.say || v.hanzi); if (v.describe && v.describe.zh) texts.add(v.describe.zh); });
+  (l.vocabulary || []).forEach(v => { texts.add(v.say || v.hanzi); if (v.describe && v.describe.zh) texts.add(v.describe.zh); if (v.blend) { v.blend.parts.forEach(p => texts.add(p.say)); texts.add(v.blend.whole.say); } });
   (l.sentencePatterns || []).forEach(p => { const s = stripEllipsis(p.hanzi); if (s) texts.add(s); });
   (l.dialogues || []).forEach(d => (d.lines || []).forEach(line => texts.add(line.hanzi)));
   (l.actions || []).forEach(a => texts.add(a.hanzi));

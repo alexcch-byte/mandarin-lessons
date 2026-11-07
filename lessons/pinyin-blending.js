@@ -95,8 +95,26 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
   var bySyl = {};
   SYL.forEach(function (r) { bySyl[r[2]] = r; });
 
+  // Recordings for the two separate sounds (same ones the Pinyin chapter uses).
+  var INIT_SAY = { b: "波", p: "坡", m: "摸", f: "佛", d: "得", t: "特", n: "呢", l: "樂", g: "哥", k: "科", h: "河",
+    j: "雞", q: "七", x: "西", zh: "知", ch: "吃", sh: "是", r: "日", z: "資", c: "詞", s: "四" };
+  var FINAL_SAY = { a: "啊", o: "喔", e: "鵝", i: "衣", u: "屋", "ü": "魚", ai: "哀", ao: "熬", ou: "歐",
+    an: "安", en: "恩", ang: "昂", ia: "呀", ie: "耶" };
+
   var vocab = SYL.map(function (r) {
-    return { hanzi: r[2], say: r[3], pinyin: equation(r), english: "", emoji: "🧩", noEnglish: true, group: r[5] };
+    var v = { hanzi: r[2], say: r[3], pinyin: equation(r), english: "", emoji: "🧩", noEnglish: true, group: r[5] };
+    // The humming-i syllables (zhi, chi, shi, ri, zi, ci, si) have no separate
+    // vowel sound to play, so they stay as plain cards.
+    if (r[1] !== "-i") {
+      v.blend = {
+        parts: [
+          { label: ZY_INIT[r[0]] + " " + r[0], say: INIT_SAY[r[0]] },
+          { label: ZY_FINAL[r[1]] + " " + r[1], say: FINAL_SAY[r[1]] }
+        ],
+        whole: { label: r[2] + "<br><small>" + zhuyinOf(r) + "</small>", say: r[3] }
+      };
+    }
+    return v;
   });
 
   // "Build the syllable": first sound + vowel = ?

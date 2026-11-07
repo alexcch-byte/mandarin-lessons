@@ -485,6 +485,30 @@ html, body {
 .apk-btn:hover { filter: brightness(1.08); }
 .apk-note { max-width: 420px; margin: 8px auto 0; }
 
+/* ---------- Blending cards: sound + sound = syllable ---------- */
+.card-grid.blend-grid { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+.blend-card { gap: 12px; }
+.blend-row { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: nowrap; }
+.blend-op { font-size: 1.5rem; font-weight: 800; color: var(--ink-soft); }
+.blend-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  min-width: 72px; padding: 8px 8px; border: 2px solid var(--border-soft);
+  border-radius: 14px; background: var(--yellow-light); color: var(--ink);
+  font: inherit; cursor: pointer; transition: transform 0.12s ease, background 0.12s ease;
+}
+.blend-chip:active { transform: scale(0.95); }
+.blend-chip-label { font-size: 1.15rem; font-weight: 700; line-height: 1.25; white-space: nowrap; }
+.blend-chip-ico { font-size: 0.95rem; }
+.blend-whole { background: var(--green-light); border-color: var(--green); }
+.blend-whole .blend-chip-label { font-size: 1.5rem; }
+.blend-chip.playing { background: var(--yellow); transform: scale(1.08); }
+.blend-whole.playing { background: var(--green); color: #fff; }
+.blend-play {
+  border: none; border-radius: 999px; padding: 8px 18px; font: inherit; font-weight: 700;
+  color: #fff; background: var(--orange-dark); cursor: pointer;
+}
+.blend-play:active { transform: scale(0.96); }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 640px) {
   .header-inner { flex-direction: column; align-items: flex-start; }
