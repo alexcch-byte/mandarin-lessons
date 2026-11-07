@@ -83,6 +83,12 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
       { hanzi: "我", pinyin: "wǒ", english: "I, me" }
     ],
 
+    // Class recordings from the teacher (song version and spoken reading).
+    audioTracks: [
+      { title: "朗讀示範：我們的家", titleEnglish: "Model reading — listen, then read along", audioFile: "vendor/audio-tracks/our-home-reading.mp3" },
+      { title: "歌曲：我們的家", titleEnglish: "The song version — sing along", audioFile: "vendor/audio-tracks/our-home-song.mp3" }
+    ],
+
     exercises: [
       {
         type: "match-emoji",

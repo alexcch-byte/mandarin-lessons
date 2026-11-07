@@ -747,6 +747,29 @@
       panel.appendChild(songBlock);
     }
 
+    // Recorded audio that ships with the app (song / model reading), played
+    // from a local file so it works offline.
+    var tracks = state.currentLesson.audioTracks || [];
+    if (tracks.length) {
+      var tBlock = el("div", "exercise-block");
+      tBlock.appendChild(el("h3", null, "🎧 Listen"));
+      tracks.forEach(function (t) {
+        var tItem = el("div", "audio-track");
+        tItem.appendChild(el("h4", null, t.title));
+        if (t.titleEnglish) tItem.appendChild(el("p", "exercise-instructions", t.titleEnglish));
+        var audio = document.createElement("audio");
+        audio.src = t.audioFile;
+        audio.controls = true;
+        audio.preload = "none";
+        audio.style.width = "100%";
+        audio.style.maxWidth = "560px";
+        audio.style.display = "block";
+        tItem.appendChild(audio);
+        tBlock.appendChild(tItem);
+      });
+      panel.appendChild(tBlock);
+    }
+
     var videos = state.currentLesson.videos || [];
     if (videos.length) {
       var vBlock = el("div", "exercise-block");
