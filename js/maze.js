@@ -337,9 +337,14 @@
   function showLevelList(gameId) {
     game = null;
     var info = gameInfo(gameId);
+    // Rebuild every time: if the Games button was tapped before the lessons had
+    // finished loading, the lists built in open() would be empty.
+    levels = buildLevels();
+    pinyinLevels = buildPinyinLevels();
     setHeader(info.emoji + " " + info.title, "", "← Games", showHub);
     body.innerHTML = "";
     body.appendChild(el("p", "maze-intro", info.desc));
+    if (!levelsFor(gameId).length) body.appendChild(el("p", "maze-intro", "Lessons are still loading — tap ← Games and try again in a moment."));
     var list = el("div", "maze-levels");
     levelsFor(gameId).forEach(function (lv, i) {
       var open_ = isUnlocked(gameId, i);
