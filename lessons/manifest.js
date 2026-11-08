@@ -18,10 +18,12 @@ window.LESSON_FILES = [
   "lessons/homework-1.js",
   "lessons/homework-2.js",
   "lessons/lesson-1-writing.js",
+  "lessons/lesson-2-writing.js",
   "lessons/midterm-mock.js",
   "lessons/homework-3.js",
   "lessons/homework-4.js",
   "lessons/homework-5.js",
   "lessons/homework-6.js",
+  "lessons/homework-7.js",
   "lessons/reading-contest.js"
 ];
