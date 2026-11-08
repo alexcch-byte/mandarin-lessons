@@ -344,7 +344,14 @@
     setHeader(info.emoji + " " + info.title, "", "← Games", showHub);
     body.innerHTML = "";
     body.appendChild(el("p", "maze-intro", info.desc));
-    if (!levelsFor(gameId).length) body.appendChild(el("p", "maze-intro", "Lessons are still loading — tap ← Games and try again in a moment."));
+    if (!levelsFor(gameId).length) {
+      var note = el("p", "maze-intro maze-loading", "⏳ Lessons are still loading…");
+      body.appendChild(note);
+      setTimeout(function () {   // try again until they arrive (slow tablets), unless the child left this screen
+        if (!root.hidden && note.parentNode === body) showLevelList(gameId);
+      }, 700);
+      return;
+    }
     var list = el("div", "maze-levels");
     levelsFor(gameId).forEach(function (lv, i) {
       var open_ = isUnlocked(gameId, i);
