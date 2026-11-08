@@ -5,6 +5,8 @@
 //   🃏 Memory Match flip cards to find matching pairs (each flip says the word)
 //   🎈 Balloon Pop  pop the balloon that has the right picture
 //   🐼 Maze         right answers move the explorer through a maze to the star
+//   🔤 Pinyin Match tap a pinyin, then tap the picture it belongs to (blending
+//                   chapters: tap the sounds, then the pinyin they make)
 // Uses window.HelloHuayu (js/app.js) for speech and the lesson data.
 (function () {
   "use strict";
@@ -21,7 +23,8 @@
     { id: "easy", emoji: "👆", title: "Easy Pick", desc: "Hear a word, then tap one of two pictures." },
     { id: "memory", emoji: "🃏", title: "Memory Match", desc: "Flip cards and find the matching pairs." },
     { id: "balloon", emoji: "🎈", title: "Balloon Pop", desc: "Pop the balloon with the right picture." },
-    { id: "maze", emoji: "🐼", title: "Maze", desc: "Answer right to help the panda find the star." }
+    { id: "maze", emoji: "🐼", title: "Maze", desc: "Answer right to help the panda find the star." },
+    { id: "pinyin", emoji: "🔤", title: "Pinyin Match", desc: "Match each pinyin to its picture." }
   ];
 
   var CELL = 56;       // maze cell size (SVG units)
@@ -29,6 +32,9 @@
   var MIN_STEPS = 8, MAX_STEPS = 12;
   var QUIZ_ROUNDS = 8;
   var MEMORY_PAIRS = 4;
+  var PINYIN_PAIRS = 5;
+  // Chapters whose "hanzi" are just letters, so they would give away nothing to match.
+  var PINYIN_SKIP = { "pinyin": 1, "pinyin-blending": 1 };
   // Every balloon is the same pale colour so it never competes with the colour of the picture inside.
   var BALLOON_COLOUR = "#fff3cf";
 
@@ -36,6 +42,7 @@
   var root, body, titleEl, progressEl, backBtn;
   var progress = loadProgress();
   var levels = [];
+  var pinyinLevels = [];
   var game = null;
 
   // ---------- storage (per-device conveniences; must never throw) ----------
@@ -100,11 +107,15 @@
     return "Lesson " + lesson.lessonNumber + " — " + lesson.titleEnglish;
   }
 
-  function buildLevels() {
+  function orderedLessons() {
     var lessons = (api() && api().lessons()) || [];
-    var ordered = lessons.map(function (l, i) { return { l: l, r: rank(l, i) }; })
+    return lessons.map(function (l, i) { return { l: l, r: rank(l, i) }; })
       .sort(function (a, b) { return a.r - b.r; })
       .map(function (x) { return x.l; });
+  }
+
+  function buildLevels() {
+    var ordered = orderedLessons();
     var out = [];
     ordered.forEach(function (lesson) {
       var vocab = lesson.vocabulary || [];
@@ -132,6 +143,63 @@
     });
     return out;
   }
+
+  // Pinyin Match levels: one per vocabulary group that has pinyin to match.
+  // Normal words pair pinyin <-> picture + hanzi; blending cards pair the two
+  // sounds <-> the pinyin they make.
+  function buildPinyinLevels() {
+    var out = [];
+    orderedLessons().forEach(function (lesson) {
+      var vocab = lesson.vocabulary || [];
+      var groups = [];
+      vocab.forEach(function (v) { if (v.group && groups.indexOf(v.group) < 0) groups.push(v.group); });
+      if (!groups.length) groups = [null];
+      var blendLesson = !!(vocab[0] && vocab[0].blend);
+      if (PINYIN_SKIP[lesson.id] && !blendLesson) return;
+      groups.forEach(function (g) {
+        var seen = {};
+        var items = [];
+        vocab.forEach(function (v) {
+          if (g !== null && v.group !== g) return;
+          if (!v.pinyin) return;
+          var item;
+          if (v.blend) {
+            var key = v.blend.whole.label;
+            if (seen[key]) return;
+            seen[key] = true;
+            item = {
+              say: v.blend.whole.say,
+              parts: v.blend.parts.map(function (p) { return p.say; }),
+              aHtml: '<span class="pm-sounds">' + v.blend.parts.map(function (p) { return p.label; }).join(' <i>+</i> ') + "</span>",
+              bHtml: '<span class="pm-pinyin">' + v.blend.whole.label + "</span>"
+            };
+          } else {
+            if (seen[v.pinyin]) return;
+            seen[v.pinyin] = true;
+            var vis = visualOf(v);
+            item = {
+              say: v.say || v.hanzi,
+              parts: null,
+              aHtml: '<span class="pm-pinyin">' + v.pinyin + "</span>",
+              bHtml: (vis ? visualHtml(vis) : "") + '<span class="pm-hanzi' + (vis ? "" : " big") + '">' + v.hanzi + "</span>"
+            };
+          }
+          items.push(item);
+        });
+        if (items.length < 4) return;
+        out.push({
+          id: lesson.id + "|" + (g || ""),
+          title: g ? g : lessonLabel(lesson),
+          subtitle: g ? lessonLabel(lesson) : "",
+          blend: blendLesson,
+          items: items
+        });
+      });
+    });
+    return out;
+  }
+
+  function levelsFor(gameId) { return gameId === "pinyin" ? pinyinLevels : levels; }
 
   // Only the maze locks levels; the basic games are open from the start.
   function isUnlocked(gameId, i) {
@@ -232,6 +300,7 @@
   // ---------- views: hub and level lists ----------
   function open() {
     levels = buildLevels();
+    pinyinLevels = buildPinyinLevels();
     root.hidden = false;
     document.body.style.overflow = "hidden";
     showHub();
@@ -272,7 +341,7 @@
     body.innerHTML = "";
     body.appendChild(el("p", "maze-intro", info.desc));
     var list = el("div", "maze-levels");
-    levels.forEach(function (lv, i) {
+    levelsFor(gameId).forEach(function (lv, i) {
       var open_ = isUnlocked(gameId, i);
       var stars = progress.stars[starKey(gameId, lv)] || 0;
       var card = el("button", "maze-level" + (open_ ? "" : " locked"));
@@ -301,12 +370,13 @@
   function startGame(gameId, index) {
     if (gameId === "maze") startMaze(index);
     else if (gameId === "memory") startMemory(index);
+    else if (gameId === "pinyin") startPinyin(index);
     else startQuiz(gameId, index);
   }
 
   // ---------- shared finish screen ----------
   function finishScreen(gameId, index, stars, detail) {
-    var lv = levels[index];
+    var lv = levelsFor(gameId)[index];
     var key = starKey(gameId, lv);
     if ((progress.stars[key] || 0) < stars) progress.stars[key] = stars;
     saveProgress();
@@ -324,7 +394,7 @@
     again.type = "button";
     again.addEventListener("click", function () { startGame(gameId, index); });
     row.appendChild(again);
-    if (index + 1 < levels.length) {
+    if (index + 1 < levelsFor(gameId).length) {
       var next = el("button", "maze-btn primary", "Next level →");
       next.type = "button";
       next.addEventListener("click", function () { startGame(gameId, index + 1); });
@@ -473,6 +543,95 @@
         card.classList.remove("flipped");
         if (game === g) g.busy = false;
       }, 1300);
+    }
+  }
+
+  // ---------- Pinyin Match ----------
+  function pickBoards(items) {
+    var sh = shuffle(items);
+    var first = sh.slice(0, PINYIN_PAIRS);
+    if (items.length <= PINYIN_PAIRS + 1) return [sh];   // small level: a single board
+    var rest = sh.slice(PINYIN_PAIRS, PINYIN_PAIRS * 2);
+    if (rest.length < 4) rest = rest.concat(shuffle(first)).slice(0, 4);
+    return [first, rest];
+  }
+
+  function startPinyin(index) {
+    var lv = pinyinLevels[index];
+    game = { mode: "pinyin", index: index, level: lv, boards: pickBoards(lv.items), board: 0, mistakes: 0, busy: false, a: null, b: null, left: 0 };
+    setHeader(lv.title, "", "← Levels", function () { showLevelList("pinyin"); });
+    body.innerHTML = "";
+    var wrap = el("div", "quiz-wrap quiz-pinyin");
+    wrap.appendChild(el("div", "maze-prompt", lv.blend ? "Tap the two sounds, then tap the pinyin they make!" : "Tap a pinyin, then tap the picture that matches!"));
+    var boardEl = el("div", "pm-board");
+    wrap.appendChild(boardEl);
+    body.appendChild(wrap);
+    game.boardEl = boardEl;
+    renderPinyinBoard();
+  }
+
+  function speakParts(parts, g) {
+    (function next(i) {
+      if (i >= parts.length || game !== g || !api() || !api().speak) return;
+      api().speak(parts[i], function () { setTimeout(function () { next(i + 1); }, 150); }, { noEnglish: true });
+    })(0);
+  }
+
+  function renderPinyinBoard() {
+    var g = game;
+    var items = g.boards[g.board];
+    g.a = g.b = null;
+    g.busy = false;
+    g.left = items.length;
+    progressEl.textContent = g.boards.length > 1 ? "Board " + (g.board + 1) + " of " + g.boards.length : "";
+    g.boardEl.innerHTML = "";
+    ["a", "b"].forEach(function (side) {
+      var col = el("div", "pm-col pm-col-" + side);
+      shuffle(items).forEach(function (item) {
+        var card = el("button", "pm-card pm-" + side, item[side + "Html"]);
+        card.type = "button";
+        card.addEventListener("click", function () { pinyinPick(side, card, item); });
+        col.appendChild(card);
+      });
+      g.boardEl.appendChild(col);
+    });
+  }
+
+  function pinyinPick(side, card, item) {
+    var g = game;
+    if (!g || g.busy || card.classList.contains("matched")) return;
+    if (g[side]) g[side].card.classList.remove("selected");
+    g[side] = { card: card, item: item };
+    card.classList.add("selected");
+    if (side === "a" && item.parts) speakParts(item.parts, g);
+    else say(item.say);
+    if (!g.a || !g.b) return;
+    var a = g.a, b = g.b;
+    g.busy = true;
+    if (a.item === b.item) {
+      [a.card, b.card].forEach(function (c) { c.classList.remove("selected"); c.classList.add("matched"); });
+      g.left--;
+      g.a = g.b = null;
+      setTimeout(function () { if (game === g) say("對了"); }, 900);
+      if (g.left > 0) { g.busy = false; return; }   // keep playing; only the last pair waits
+      setTimeout(function () {
+        if (game !== g) return;
+        g.busy = false;
+        if (g.board + 1 < g.boards.length) {
+          g.board++;
+          renderPinyinBoard();
+        } else {
+          var stars = g.mistakes <= 1 ? 3 : (g.mistakes <= 3 ? 2 : 1);
+          finishScreen("pinyin", g.index, stars, mistakesText(g.mistakes));
+        }
+      }, 2000);
+    } else {
+      g.mistakes++;
+      [a.card, b.card].forEach(function (c) { c.classList.add("wrong"); });
+      setTimeout(function () {
+        [a.card, b.card].forEach(function (c) { c.classList.remove("wrong"); c.classList.remove("selected"); });
+        if (game === g) { g.a = g.b = null; g.busy = false; }
+      }, 700);
     }
   }
 
