@@ -392,7 +392,7 @@
         visual = el("div", "vocab-swatch");
         visual.style.background = v.swatch;
       } else if (v.svg) {
-        visual = el("div", "vocab-svg", v.svg);
+        visual = el("div", "vocab-svg" + (v.picture ? " big" : ""), v.svg);
       } else {
         visual = el("div", "vocab-emoji", v.emoji || "🀄");
       }
@@ -400,6 +400,7 @@
       card.appendChild(el("div", "vocab-hanzi hanzi", v.hanzi));
       card.appendChild(el("div", "vocab-pinyin", v.pinyin));
       card.appendChild(el("div", "vocab-english", v.english));
+      if (v.soundsLike) card.appendChild(el("div", "vocab-sounds", "sounds like “" + v.soundsLike + "”"));
       // noEnglish: pronunciation-only cards (e.g. pinyin letter sounds), where
       // an English meaning of the recording's character would be misleading.
       card.appendChild(speakBtn(v.say || v.hanzi, false, v.noEnglish ? { noEnglish: true } : null));
@@ -424,6 +425,8 @@
     panel.innerHTML = "";
     panel.appendChild(el("h2", "section-title", "📚 New Words"));
     panel.appendChild(el("p", "section-sub", "Tap the speaker to hear each word."));
+    // Optional chapter picture (lesson.heroSvg): a scene that shows what the chapter is about.
+    if (state.currentLesson.heroSvg) panel.appendChild(el("div", "hero-picture", state.currentLesson.heroSvg));
 
     var vocab = state.currentLesson.vocabulary;
     var hasGroups = vocab.some(function (v) { return v.group; });

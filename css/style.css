@@ -753,3 +753,11 @@ html, body {
 .pm-card .maze-swatch { width: 52px; height: 52px; }
 .pm-card .maze-shape svg { width: 52px; height: 52px; }
 @media (max-width: 520px) { .pm-board { gap: 8px; } .pm-pinyin { font-size: 1.6rem; } .pm-sounds { font-size: 1.2rem; } .pm-card { min-height: 80px; } }
+
+/* ---------- Chapter picture + large word pictures ---------- */
+.hero-picture { max-width: 560px; margin: 0 auto 16px; }
+.hero-picture svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.12)); }
+.vocab-svg.big { height: 124px; }
+.vocab-svg.big svg { width: 124px; height: 124px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)); }
+.pm-card .maze-shape svg { width: 72px; height: 72px; }
+.vocab-sounds { font-size: 0.8rem; font-style: italic; color: #8a7a62; margin-top: 2px; }
