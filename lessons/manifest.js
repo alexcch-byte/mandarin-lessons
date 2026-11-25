@@ -27,5 +27,6 @@ window.LESSON_FILES = [
   "lessons/homework-7.js",
   "lessons/reading-contest.js",
   "lessons/common-phrases.js",
-  "lessons/final-mock.js"
+  "lessons/final-mock.js",
+  "lessons/gemini-flashcards.js"
 ];

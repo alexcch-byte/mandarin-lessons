@@ -862,6 +862,7 @@
       else if (ex.type === "read-aloud") panel.appendChild(renderReadAloud(ex));
       else if (ex.type === "listen-pick") panel.appendChild(renderListenPick(ex));
       else if (ex.type === "write-blank") panel.appendChild(renderWriteBlank(ex));
+      else if (ex.type === "flashcards") panel.appendChild(renderFlashcards(ex));
     });
   }
 
@@ -1196,6 +1197,63 @@
       grid.appendChild(chip);
     });
     block.appendChild(grid);
+    return block;
+  }
+
+  // Flash cards: the front shows the Chinese; tap the card to flip it and see the
+  // zhuyin, pinyin and English. items: [{ front, zhuyin, pinyin, english, say }]
+  function renderFlashcards(ex) {
+    var block = el("div", "exercise-block");
+    block.appendChild(el("h3", null, ex.title));
+    if (ex.instructions) block.appendChild(el("p", "exercise-instructions", ex.instructions));
+    var deck = ex.items.slice();
+    var idx = 0, flipped = false;
+
+    var card = el("button", "flashcard");
+    card.type = "button";
+    var count = el("div", "flashcard-count");
+    var bar = el("div", "flashcard-controls");
+    var prev = el("button", "fc-btn", "◀");
+    var next = el("button", "fc-btn", "▶");
+    var shuf = el("button", "fc-btn", "🔀 Shuffle");
+    var hear = el("button", "fc-btn fc-hear", "🔊 Hear it");
+    [prev, next, shuf, hear].forEach(function (b) { b.type = "button"; });
+
+    function show() {
+      var it = deck[idx];
+      card.innerHTML = "";
+      card.classList.toggle("flipped", flipped);
+      if (!flipped) {
+        card.appendChild(el("div", "fc-front hanzi", it.front));
+        card.appendChild(el("div", "fc-hint", "Tap the card to flip it"));
+      } else {
+        if (it.zhuyin) card.appendChild(el("div", "fc-zhuyin", it.zhuyin));
+        if (it.pinyin) card.appendChild(el("div", "fc-pinyin", it.pinyin));
+        card.appendChild(el("div", "fc-english", it.english));
+      }
+      count.textContent = (idx + 1) + " of " + deck.length;
+      prev.disabled = idx === 0;
+      next.disabled = idx === deck.length - 1;
+    }
+    card.addEventListener("click", function () { flipped = !flipped; show(); });
+    prev.addEventListener("click", function () { if (idx > 0) { idx--; flipped = false; show(); } });
+    next.addEventListener("click", function () { if (idx < deck.length - 1) { idx++; flipped = false; show(); } });
+    shuf.addEventListener("click", function () {
+      for (var i = deck.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = deck[i]; deck[i] = deck[j]; deck[j] = t;
+      }
+      idx = 0; flipped = false; show();
+    });
+    hear.addEventListener("click", function () { var it = deck[idx]; speak(it.say || it.front); });
+
+    block.appendChild(card);
+    bar.appendChild(prev); bar.appendChild(count); bar.appendChild(next);
+    block.appendChild(bar);
+    var bar2 = el("div", "flashcard-controls");
+    bar2.appendChild(hear); bar2.appendChild(shuf);
+    block.appendChild(bar2);
+    show();
     return block;
   }
 

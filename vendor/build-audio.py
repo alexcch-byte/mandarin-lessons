@@ -56,6 +56,7 @@ window.MANDARIN_LESSONS.forEach(l => {
   (l.exercises || []).forEach(ex => {
     if (ex.type === 'match-emoji') (ex.items || []).forEach(i => texts.add(i.hanzi));
     if (ex.type === 'read-aloud') (ex.items || []).forEach(i => texts.add(i));
+    if (ex.type === 'flashcards') (ex.items || []).forEach(i => texts.add(i.say || i.front));
     if (ex.type === 'listen-pick') (ex.items || []).forEach(i => texts.add(i.say));
     if (ex.type === 'write-blank') (ex.items || []).forEach(i => { if (i.say) texts.add(i.say); });
     if (ex.type === 'fill-blank') (ex.items || []).forEach(i => { if (i.say) texts.add(i.say); });
@@ -86,6 +87,7 @@ window.MANDARIN_LESSONS.forEach(l => {
   (l.sentencePatterns || []).forEach(p => addEn(stripEllipsis(p.hanzi), p.english));
   (l.dialogues || []).forEach(d => (d.lines || []).forEach(line => addEn(line.hanzi, line.english)));
   (l.actions || []).forEach(a => addEn(a.hanzi, a.english));
+  (l.exercises || []).forEach(ex => { if (ex.type === 'flashcards') (ex.items || []).forEach(i => addEn(i.say || i.front, i.english)); });
 });
 // The feedback sounds are spoken without English at play time.
 delete english['太棒了'];
