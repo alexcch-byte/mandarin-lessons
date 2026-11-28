@@ -93,6 +93,13 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
     tracing.push({ hanzi: ZY_FINAL[r[0]], pinyin: r[0], english: "zhuyin symbol for  " + r[0], zhuyin: true, wordHanzi: r[1] });
   });
 
+  // Listen & write quizzes: hear a sound, pick the English letters, write the zhuyin.
+  var QUIZ_INITIALS = INITIALS.map(function (r) { return { say: r[1], letter: r[0], zhuyin: ZY_INIT[r[0]] }; });
+  var QUIZ_FINALS = FINALS.map(function (r) { return { say: r[1], letter: r[0], zhuyin: ZY_FINAL[r[0]] }; });
+  var QUIZ_BLENDS = BLENDS.map(function (r) {
+    return { say: r[3], letter: r[0] + toned(r[1], r[2]), zhuyin: ZY_INIT[r[0]] + ZY_FINAL[r[1]] + TONE_MARK[r[2]] };
+  });
+
   // zhuyin → pinyin match-up helper
   function zyItems(letters) {
     return letters.map(function (l) {
@@ -116,6 +123,27 @@ window.MANDARIN_LESSONS = window.MANDARIN_LESSONS || [];
     writingPractice: tracing,
 
     exercises: [
+      {
+        type: "sound-write",
+        title: "🎧✍️ 聽寫小考：Listen & Write Quiz — First Sounds",
+        instructions: "Listen to the sound, pick the English letters, then write the Chinese zhuyin symbol in the box with your finger.",
+        perRound: 8,
+        items: QUIZ_INITIALS
+      },
+      {
+        type: "sound-write",
+        title: "🎧✍️ 聽寫小考：Listen & Write Quiz — Vowel Sounds",
+        instructions: "Listen to the vowel sound, pick the English letters, then write the Chinese zhuyin symbol.",
+        perRound: 6,
+        items: QUIZ_FINALS
+      },
+      {
+        type: "sound-write",
+        title: "🎧✍️ 聽寫小考：Listen & Write Quiz — Blended Syllables",
+        instructions: "Listen to the syllable, pick the English letters (with the tone mark), then write both zhuyin symbols — and the tone mark if there is one.",
+        perRound: 6,
+        items: QUIZ_BLENDS
+      },
       {
         type: "listen-pick",
         title: "聽一聽：Which Sound?",

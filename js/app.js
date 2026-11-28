@@ -863,6 +863,7 @@
       else if (ex.type === "listen-pick") panel.appendChild(renderListenPick(ex));
       else if (ex.type === "write-blank") panel.appendChild(renderWriteBlank(ex));
       else if (ex.type === "flashcards") panel.appendChild(renderFlashcards(ex));
+      else if (ex.type === "sound-write") panel.appendChild(renderSoundWrite(ex));
     });
   }
 
@@ -1197,6 +1198,184 @@
       grid.appendChild(chip);
     });
     block.appendChild(grid);
+    return block;
+  }
+
+  // Listen & write quiz (pinyin chapter). For each question the app plays a sound;
+  // step 1: pick the English (pinyin) letters; step 2: write the Chinese zhuyin
+  // symbol(s) with a finger in the box, then tap Check to see the answer and mark
+  // yourself (zhuyin has no stroke data, so the child compares with the model).
+  // items: [{ say, letter, zhuyin }]; ex.perRound = questions per round.
+  function renderSoundWrite(ex) {
+    var block = el("div", "exercise-block");
+    block.appendChild(el("h3", null, ex.title));
+    if (ex.instructions) block.appendChild(el("p", "exercise-instructions", ex.instructions));
+    var stage = el("div", "sw-stage");
+    block.appendChild(stage);
+
+    var round = [], idx = 0, stats = null;
+
+    function shuffled(a) {
+      a = a.slice();
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+    function hear(it) { speak(it.say, null, { noEnglish: true }); }
+
+    function startRound() {
+      round = shuffled(ex.items).slice(0, ex.perRound || 8);
+      idx = 0;
+      stats = { picked: 0, written: 0 };
+      showQuestion();
+    }
+
+    function showQuestion() {
+      var it = round[idx];
+      var tried = false;
+      stage.innerHTML = "";
+      stage.appendChild(el("div", "sw-progress", "Question " + (idx + 1) + " of " + round.length));
+      var listen = el("button", "sw-listen", "🔊 Listen");
+      listen.type = "button";
+      listen.addEventListener("click", function () { hear(it); });
+      stage.appendChild(listen);
+
+      // Step 1 — pick the English letters.
+      var s1 = el("div", "sw-step");
+      s1.appendChild(el("p", "sw-prompt", "1️⃣ Pick the English letters you hear:"));
+      var others = [];
+      ex.items.forEach(function (o) { if (o.letter !== it.letter && others.indexOf(o.letter) < 0) others.push(o.letter); });
+      var choices = shuffled([it.letter].concat(shuffled(others).slice(0, 3)));
+      var optsRow = el("div", "sw-options");
+      var s2 = el("div", "sw-step sw-hidden");
+      choices.forEach(function (c) {
+        var b = el("button", "sw-opt", c);
+        b.type = "button";
+        b.addEventListener("click", function () {
+          if (b.disabled) return;
+          if (c === it.letter) {
+            b.classList.add("right");
+            [].forEach.call(optsRow.children, function (x) { x.disabled = true; });
+            if (!tried) stats.picked++;
+            speak("對了", null, { noEnglish: true });
+            s2.classList.remove("sw-hidden");
+          } else {
+            tried = true;
+            b.classList.add("wrong");
+            b.disabled = true;
+            setTimeout(function () { hear(it); }, 400);
+          }
+        });
+        optsRow.appendChild(b);
+      });
+      s1.appendChild(optsRow);
+      stage.appendChild(s1);
+
+      // Step 2 — write the zhuyin in the box.
+      s2.appendChild(el("p", "sw-prompt", "2️⃣ Now write it in Chinese (注音) with your finger:"));
+      var symbols = it.zhuyin.replace(/[ˊˇˋ˙]/g, "").length;
+      var W = symbols > 1 ? 420 : 220, H = symbols > 1 ? 200 : 220;
+      var canvas = document.createElement("canvas");
+      canvas.width = W; canvas.height = H;
+      canvas.className = "sw-canvas";
+      canvas.style.maxWidth = W + "px";
+      var ctx = canvas.getContext("2d");
+      function clearBox() {
+        ctx.clearRect(0, 0, W, H);
+        ctx.strokeStyle = "#e6d3a0"; ctx.lineWidth = 2; ctx.setLineDash([6, 6]);
+        ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.strokeStyle = "#3a2e1f"; ctx.lineWidth = 9; ctx.lineCap = "round"; ctx.lineJoin = "round";
+      }
+      clearBox();
+      var drawing = false, lx = 0, ly = 0;
+      function pos(ev) {
+        var r = canvas.getBoundingClientRect();
+        return { x: (ev.clientX - r.left) * (W / r.width), y: (ev.clientY - r.top) * (H / r.height) };
+      }
+      canvas.addEventListener("pointerdown", function (ev) {
+        ev.preventDefault();
+        drawing = true;
+        var p = pos(ev); lx = p.x; ly = p.y;
+        try { canvas.setPointerCapture(ev.pointerId); } catch (e) {}
+      });
+      canvas.addEventListener("pointermove", function (ev) {
+        if (!drawing) return;
+        ev.preventDefault();
+        var p = pos(ev);
+        ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(p.x, p.y); ctx.stroke();
+        lx = p.x; ly = p.y;
+      });
+      function up() { drawing = false; }
+      canvas.addEventListener("pointerup", up);
+      canvas.addEventListener("pointercancel", up);
+      s2.appendChild(canvas);
+
+      var tools = el("div", "sw-tools");
+      var clear = el("button", "fc-btn", "🧽 Clear");
+      var check = el("button", "fc-btn fc-hear", "✔ Check my writing");
+      clear.type = check.type = "button";
+      clear.addEventListener("click", clearBox);
+      tools.appendChild(clear); tools.appendChild(check);
+      s2.appendChild(tools);
+
+      var reveal = el("div", "sw-reveal sw-hidden");
+      s2.appendChild(reveal);
+      check.addEventListener("click", function () {
+        check.disabled = clear.disabled = true;
+        canvas.style.pointerEvents = "none";
+        reveal.classList.remove("sw-hidden");
+        reveal.innerHTML = "";
+        reveal.appendChild(el("div", "sw-model-label", "Here is how it is written:"));
+        reveal.appendChild(el("div", "sw-model hanzi", it.zhuyin));
+        reveal.appendChild(el("div", "sw-model-sub", it.letter));
+        reveal.appendChild(el("p", "sw-prompt", "Does your writing match?"));
+        var marks = el("div", "sw-tools");
+        var yes = el("button", "fc-btn fc-hear", "✅ Yes, I got it");
+        var no = el("button", "fc-btn", "🔁 Not yet — I'll practise");
+        yes.type = no.type = "button";
+        function done(ok) {
+          if (ok) stats.written++;
+          yes.disabled = no.disabled = true;
+          var last = idx >= round.length - 1;
+          var nextBtn = el("button", "fc-btn sw-next", last ? "🏁 See my score" : "Next question ▶");
+          nextBtn.type = "button";
+          nextBtn.addEventListener("click", function () { if (last) showScore(); else { idx++; showQuestion(); } });
+          reveal.appendChild(nextBtn);
+        }
+        yes.addEventListener("click", function () { done(true); });
+        no.addEventListener("click", function () { done(false); });
+        marks.appendChild(yes); marks.appendChild(no);
+        reveal.appendChild(marks);
+      });
+      stage.appendChild(s2);
+      setTimeout(function () { hear(it); }, 250);
+    }
+
+    function showScore() {
+      stage.innerHTML = "";
+      var n = round.length;
+      var perfect = stats.picked === n && stats.written === n;
+      stage.appendChild(el("div", "sw-score-emoji", perfect ? "🌟" : "🎉"));
+      stage.appendChild(el("h4", "sw-score-title", perfect ? "Perfect score!" : "Well done!"));
+      stage.appendChild(el("p", "sw-score", "English letters right the first time: " + stats.picked + " / " + n));
+      stage.appendChild(el("p", "sw-score", "Chinese zhuyin written correctly: " + stats.written + " / " + n));
+      speak("太棒了", null, { noEnglish: true });
+      var again = el("button", "fc-btn", "↺ New round");
+      again.type = "button";
+      again.addEventListener("click", startRound);
+      stage.appendChild(again);
+    }
+
+    var intro = el("div", "sw-intro");
+    intro.appendChild(el("p", "sw-prompt", "You will hear " + (ex.perRound || 8) + " sounds. For each one: pick the English letters, then write the Chinese zhuyin."));
+    var go = el("button", "fc-btn fc-hear", "▶ Start the quiz");
+    go.type = "button";
+    go.addEventListener("click", startRound);
+    intro.appendChild(go);
+    stage.appendChild(intro);
     return block;
   }
 

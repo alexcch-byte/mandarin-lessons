@@ -784,3 +784,37 @@ html, body {
 }
 .fc-btn:disabled { opacity: 0.4; cursor: default; }
 .fc-btn.fc-hear { background: #2f8f5b; }
+
+/* ---------- Listen & write quiz (sound-write) ---------- */
+.sw-stage { max-width: 560px; margin: 8px auto; text-align: center; }
+.sw-progress { font-weight: 800; color: #6b3a00; margin-bottom: 8px; }
+.sw-listen {
+  border: none; border-radius: 999px; padding: 14px 30px; font-size: 1.3rem; font-weight: 800; color: #fff;
+  background: #2f8f5b; box-shadow: var(--shadow); cursor: pointer; font-family: inherit; margin-bottom: 10px;
+}
+.sw-listen:active { transform: scale(0.96); }
+.sw-prompt { font-weight: 700; color: #6b3a00; margin: 10px 0 6px; }
+.sw-step { margin-top: 6px; }
+.sw-hidden { display: none; }
+.sw-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.sw-opt {
+  border: 3px solid #d9c48f; border-radius: 16px; background: #fff; padding: 14px 4px; font-size: 1.6rem; font-weight: 800;
+  color: #5a2d00; cursor: pointer; font-family: inherit; box-shadow: var(--shadow);
+}
+.sw-opt:active { transform: scale(0.96); }
+.sw-opt.right { border-color: #2f8f5b; background: #e4f7ec; }
+.sw-opt.wrong { border-color: #d94c4c; background: #fde8e8; opacity: 0.6; animation: maze-shake 0.4s; }
+.sw-canvas {
+  width: 100%; height: auto; background: #fffdf6; border: 3px solid #f0d9a0; border-radius: 16px;
+  touch-action: none; display: block; margin: 6px auto; cursor: crosshair;
+}
+.sw-tools { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 8px 0; }
+.sw-reveal { margin-top: 8px; padding: 12px; border-radius: 16px; background: #f0f9ff; border: 3px solid #7dd3fc; }
+.sw-model-label { font-size: 0.9rem; color: #0369a1; font-weight: 700; }
+.sw-model { font-size: 3.4rem; font-weight: 800; color: #5a2d00; line-height: 1.2; }
+.sw-model-sub { font-size: 1.3rem; font-weight: 800; color: #8a63c7; }
+.sw-next { margin-top: 8px; }
+.sw-score-emoji { font-size: 3rem; }
+.sw-score-title { margin: 4px 0; font-size: 1.4rem; color: #5a2d00; }
+.sw-score { font-weight: 700; color: #6b3a00; margin: 4px 0; }
+@media (max-width: 520px) { .sw-options { grid-template-columns: repeat(2, 1fr); } }
