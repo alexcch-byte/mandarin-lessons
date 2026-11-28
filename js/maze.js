@@ -1,7 +1,7 @@
 // Games hub — sub-games for children who can't read yet. Every game is built
 // from the lessons' word + picture cards, in lesson-plan order (colours and
 // shapes first):
-//   👆 Easy Pick    hear a word, tap one of two pictures
+//   👆 Easy Pick    hear a word, tap one of four pictures
 //   🃏 Memory Match flip cards to find matching pairs (each flip says the word)
 //   🎈 Balloon Pop  pop the balloon that has the right picture
 //   🐼 Maze         right answers move the explorer through a maze to the star
@@ -20,7 +20,7 @@
   var GENERIC_EMOJI = { "🗣️": 1, "🧩": 1, "🀄": 1, "🎵": 1 };
 
   var GAMES = [
-    { id: "easy", emoji: "👆", title: "Easy Pick", desc: "Hear a word, then tap one of two pictures." },
+    { id: "easy", emoji: "👆", title: "Easy Pick", desc: "Hear a word, then tap the right picture (1 of 4)." },
     { id: "memory", emoji: "🃏", title: "Memory Match", desc: "Flip cards and find the matching pairs." },
     { id: "balloon", emoji: "🎈", title: "Balloon Pop", desc: "Pop the balloon with the right picture." },
     { id: "maze", emoji: "🐼", title: "Maze", desc: "Answer right to help the panda find the star." },
@@ -425,7 +425,7 @@
     return n === 0 ? "Perfect — no mistakes!" : n + (n === 1 ? " mistake" : " mistakes");
   }
 
-  // ---------- Easy Pick (2 pictures) and Balloon Pop (3 balloons) ----------
+  // ---------- Easy Pick (4 pictures) and Balloon Pop (3 balloons) ----------
   function startQuiz(mode, index) {
     var lv = levels[index];
     game = { mode: mode, index: index, level: lv, bag: wordBag(lv.items, QUIZ_ROUNDS), round: 0, mistakes: 0, busy: false, current: null };
@@ -455,7 +455,7 @@
     progressEl.textContent = "Question " + (g.round + 1) + " of " + QUIZ_ROUNDS;
     var item = g.bag[g.round];
     g.current = item;
-    var count = g.mode === "balloon" ? 3 : 2;
+    var count = g.mode === "balloon" ? 3 : 4;
     var others = shuffle(g.level.items.filter(function (it) { return it.visual.key !== item.visual.key; })).slice(0, count - 1);
     var options = shuffle([item].concat(others));
     g.choicesEl.innerHTML = "";

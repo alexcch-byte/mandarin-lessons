@@ -835,3 +835,10 @@ html, body {
 .sw-full .sw-canvas { max-width: min(92vw, 520px) !important; }
 .sw-full .sw-opt { padding: 20px 4px; font-size: 2rem; }
 .sw-full .sw-listen { font-size: 1.6rem; padding: 18px 40px; }
+
+/* Easy Pick shows four pictures (2 x 2), so the tiles are a little smaller */
+.easy-choice { min-height: 150px; }
+.easy-choice .maze-swatch { width: 90px; height: 90px; }
+.easy-choice .maze-shape svg { width: 90px; height: 90px; }
+.easy-choice .maze-emoji { font-size: 4.4rem; }
+.easy-choices { gap: 12px; }
