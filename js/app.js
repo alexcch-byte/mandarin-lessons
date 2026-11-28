@@ -1225,6 +1225,16 @@
     }
     function hear(it) { speak(it.say, null, { noEnglish: true }); }
 
+    // Re-drawing a question empties the stage, which shrinks the page and used to
+    // throw the scroll position into the next exercise. Hold the stage's height
+    // while it is rebuilt, then bring the quiz back to the top of the screen.
+    function holdPlace() { stage.style.minHeight = stage.offsetHeight + "px"; }
+    function alignQuiz() {
+      var hdr = document.querySelector(".app-header");
+      var top = block.getBoundingClientRect().top + window.pageYOffset - (hdr ? hdr.offsetHeight : 0) - 8;
+      window.scrollTo(0, Math.max(0, top));
+    }
+
     function startRound() {
       round = shuffled(ex.items).slice(0, ex.perRound || 8);
       idx = 0;
@@ -1236,6 +1246,7 @@
     function showQuestion() {
       var it = round[idx];
       var tried = false;
+      holdPlace();
       stage.innerHTML = "";
       var head = el("div", "sw-progress", "Question " + (idx + 1) + " of " + round.length);
       if (round.length > 12 && answered > 0) {
@@ -1360,10 +1371,12 @@
         reveal.appendChild(marks);
       });
       stage.appendChild(s2);
+      alignQuiz();
       setTimeout(function () { hear(it); }, 250);
     }
 
     function showScore() {
+      holdPlace();
       stage.innerHTML = "";
       var n = answered;
       var perfect = n > 0 && stats.picked === n && stats.written === n;
@@ -1378,6 +1391,8 @@
       again.type = "button";
       again.addEventListener("click", startRound);
       stage.appendChild(again);
+      stage.style.minHeight = "";
+      alignQuiz();
     }
 
     var intro = el("div", "sw-intro");
