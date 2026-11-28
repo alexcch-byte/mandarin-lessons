@@ -1213,7 +1213,7 @@
     var stage = el("div", "sw-stage");
     block.appendChild(stage);
 
-    var round = [], idx = 0, stats = null;
+    var round = [], idx = 0, stats = null, answered = 0;
 
     function shuffled(a) {
       a = a.slice();
@@ -1228,6 +1228,7 @@
     function startRound() {
       round = shuffled(ex.items).slice(0, ex.perRound || 8);
       idx = 0;
+      answered = 0;
       stats = { picked: 0, written: 0 };
       showQuestion();
     }
@@ -1236,7 +1237,14 @@
       var it = round[idx];
       var tried = false;
       stage.innerHTML = "";
-      stage.appendChild(el("div", "sw-progress", "Question " + (idx + 1) + " of " + round.length));
+      var head = el("div", "sw-progress", "Question " + (idx + 1) + " of " + round.length);
+      if (round.length > 12 && answered > 0) {
+        var endNow = el("button", "sw-end", "🏁 Finish now");
+        endNow.type = "button";
+        endNow.addEventListener("click", showScore);
+        head.appendChild(endNow);
+      }
+      stage.appendChild(head);
       var listen = el("button", "sw-listen", "🔊 Listen");
       listen.type = "button";
       listen.addEventListener("click", function () { hear(it); });
@@ -1246,7 +1254,7 @@
       var s1 = el("div", "sw-step");
       s1.appendChild(el("p", "sw-prompt", "1️⃣ Pick the English letters you hear:"));
       var others = [];
-      ex.items.forEach(function (o) { if (o.letter !== it.letter && others.indexOf(o.letter) < 0) others.push(o.letter); });
+      ex.items.forEach(function (o) { if (o.kind === it.kind && o.letter !== it.letter && others.indexOf(o.letter) < 0) others.push(o.letter); });
       var choices = shuffled([it.letter].concat(shuffled(others).slice(0, 3)));
       var optsRow = el("div", "sw-options");
       var s2 = el("div", "sw-step sw-hidden");
@@ -1338,6 +1346,7 @@
         yes.type = no.type = "button";
         function done(ok) {
           if (ok) stats.written++;
+          answered++;
           yes.disabled = no.disabled = true;
           var last = idx >= round.length - 1;
           var nextBtn = el("button", "fc-btn sw-next", last ? "🏁 See my score" : "Next question ▶");
@@ -1356,10 +1365,12 @@
 
     function showScore() {
       stage.innerHTML = "";
-      var n = round.length;
-      var perfect = stats.picked === n && stats.written === n;
+      var n = answered;
+      var perfect = n > 0 && stats.picked === n && stats.written === n;
+      if (n === 0) n = round.length;
       stage.appendChild(el("div", "sw-score-emoji", perfect ? "🌟" : "🎉"));
       stage.appendChild(el("h4", "sw-score-title", perfect ? "Perfect score!" : "Well done!"));
+      stage.appendChild(el("p", "sw-score", "Questions answered: " + answered + " of " + round.length));
       stage.appendChild(el("p", "sw-score", "English letters right the first time: " + stats.picked + " / " + n));
       stage.appendChild(el("p", "sw-score", "Chinese zhuyin written correctly: " + stats.written + " / " + n));
       speak("太棒了", null, { noEnglish: true });
