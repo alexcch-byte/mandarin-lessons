@@ -1211,6 +1211,37 @@
     block.appendChild(el("h3", null, ex.title));
     if (ex.instructions) block.appendChild(el("p", "exercise-instructions", ex.instructions));
     var stage = el("div", "sw-stage");
+
+    // Full screen: the quiz becomes a fixed overlay over the whole app (works in
+    // every browser and in the Android app); where the browser supports it we also
+    // ask for the real Fullscreen API so the browser's own bars disappear.
+    var full = false, nativeFull = false;
+    var fsBtn = el("button", "fc-btn sw-fs-btn", "⛶ Full screen");
+    fsBtn.type = "button";
+    function setFull(on) {
+      full = on;
+      block.classList.toggle("sw-full", on);
+      document.body.style.overflow = on ? "hidden" : "";
+      fsBtn.textContent = on ? "✕ Exit full screen" : "⛶ Full screen";
+      try {
+        if (on && block.requestFullscreen) {
+          block.requestFullscreen().then(function () { nativeFull = true; }).catch(function () {});
+        } else if (!on && document.fullscreenElement && document.exitFullscreen) {
+          nativeFull = false;
+          document.exitFullscreen().catch(function () {});
+        }
+      } catch (e) {}
+      alignQuiz();
+    }
+    fsBtn.addEventListener("click", function () { setFull(!full); });
+    document.addEventListener("fullscreenchange", function () {
+      if (!block.isConnected) return;
+      if (full && nativeFull && !document.fullscreenElement) { nativeFull = false; setFull(false); }
+    });
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape" && full && block.isConnected) setFull(false);
+    });
+    block.appendChild(fsBtn);
     block.appendChild(stage);
 
     var round = [], idx = 0, stats = null, answered = 0;
@@ -1230,6 +1261,7 @@
     // while it is rebuilt, then bring the quiz back to the top of the screen.
     function holdPlace() { stage.style.minHeight = stage.offsetHeight + "px"; }
     function alignQuiz() {
+      if (full) { block.scrollTop = 0; return; }
       var hdr = document.querySelector(".app-header");
       var top = block.getBoundingClientRect().top + window.pageYOffset - (hdr ? hdr.offsetHeight : 0) - 8;
       window.scrollTo(0, Math.max(0, top));

@@ -823,3 +823,15 @@ html, body {
   margin-left: 12px; border: none; border-radius: 999px; padding: 4px 12px; font-size: 0.8rem; font-weight: 700;
   color: #6b3a00; background: #f0d9a0; cursor: pointer; font-family: inherit;
 }
+
+/* Full-screen mode for the listen & write quiz */
+.sw-fs-btn { display: block; margin: 6px 0 10px; }
+.exercise-block.sw-full {
+  position: fixed; inset: 0; z-index: 1500; margin: 0; border-radius: 0; overflow: auto; box-sizing: border-box;
+  padding: 14px 16px 48px; background: linear-gradient(160deg, #fff6dc, #ffe2b8);
+}
+.sw-full .sw-fs-btn { position: sticky; top: 0; z-index: 2; margin-left: auto; }
+.sw-full .sw-stage { max-width: 760px; }
+.sw-full .sw-canvas { max-width: min(92vw, 520px) !important; }
+.sw-full .sw-opt { padding: 20px 4px; font-size: 2rem; }
+.sw-full .sw-listen { font-size: 1.6rem; padding: 18px 40px; }
